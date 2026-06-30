@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Museum Quest — ANU Museum</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Poppins:wght@400;500;600&family=Rubik:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --anu-blue:#2814FF; --anu-blue-deep:#160D99; --ink:#0B0B14; --paper:#F4F2EC;
+    --gold:#FFC93C; --white:#FFFFFF; --line: rgba(255,255,255,0.18);
+    --good:#5CE0A0; --bad:#FF6B6B;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{ background:var(--ink); color:var(--white); font-family:'Poppins',sans-serif; overflow-x:hidden; }
+  body.lang-he{ font-family:'Rubik',sans-serif; }
+  h1,h2,h3{ font-family:'Barlow Condensed',sans-serif; font-weight:800; text-transform:uppercase; }
+  body.lang-he h1, body.lang-he h2, body.lang-he h3{ font-family:'Rubik',sans-serif; text-transform:none; letter-spacing:0; }
+  button{ font-family:inherit; }
+  :focus-visible{ outline:3px solid var(--gold); outline-offset:2px; }
+  @media (prefers-reduced-motion: reduce){ *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; } }
+  .skip-link{ position:absolute; left:-999px; top:0; background:var(--gold); color:var(--ink); padding:0.6rem 1rem; z-index:200; font-weight:700; }
+  .skip-link:focus{ left:1rem; top:1rem; }
+
+  .lang-toggle{ position:fixed; top:1rem; right:1rem; z-index:100; display:flex; background:rgba(11,11,20,0.85); border:1.5px solid var(--line); border-radius:999px; padding:0.25rem; backdrop-filter:blur(6px); }
+  html[dir="rtl"] .lang-toggle{ right:auto; left:1rem; }
+  .lang-toggle button{ border:none; background:transparent; color:var(--white); padding:0.4rem 0.85rem; border-radius:999px; font-size:0.8rem; font-family:'Barlow Condensed',sans-serif; font-weight:700; cursor:pointer; }
+  body.lang-he .lang-toggle button{ font-family:'Rubik',sans-serif; }
+  .lang-toggle button.active{ background:var(--gold); color:var(--ink); }
+
+  .screen{ display:none; min-height:100vh; }
+  .screen.active{ display:block; }
+  .wrap{ max-width:760px; margin:0 auto; padding:8vh 6vw; }
+  .wrap-wide{ max-width:1000px; margin:0 auto; padding:5vh 6vw; }
+
+  .eyebrow{ font-family:'Barlow Condensed',sans-serif; font-weight:700; letter-spacing:0.25em; font-size:0.8rem; color:var(--gold); margin-bottom:1rem; }
+  body.lang-he .eyebrow{ font-family:'Rubik',sans-serif; letter-spacing:0.02em; }
+
+  /* ---------- ENTRY ---------- */
+  .entry{ background:var(--anu-blue); min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding:6vh 6vw; clip-path: polygon(0 0,100% 0,100% 94%, 0 100%); position:relative; }
+  .entry::after{ content:""; position:absolute; inset:0; background-image: repeating-linear-gradient(115deg, rgba(255,255,255,0.05) 0 2px, transparent 2px 140px); pointer-events:none; }
+  .entry h1{ font-size:clamp(2.8rem,8.5vw,6.8rem); line-height:0.92; margin:0; transform: skewX(-4deg); }
+  html[dir="rtl"] .entry h1{ transform: skewX(4deg); }
+  .entry .lede{ max-width:520px; font-size:1.05rem; line-height:1.6; margin-top:1.5rem; color:rgba(255,255,255,0.92); }
+  .start-btn{ margin-top:2.2rem; background:var(--gold); color:var(--ink); border:none; padding:1rem 2.2rem; font-family:'Barlow Condensed',sans-serif; font-weight:800; text-transform:uppercase; letter-spacing:0.04em; font-size:1.1rem; cursor:pointer; clip-path: polygon(6% 0,100% 0,94% 100%,0% 100%); transition: transform .15s ease; }
+  html[dir="rtl"] .start-btn{ clip-path: polygon(0 0,94% 0,100% 100%,6% 100%); }
+  body.lang-he .start-btn{ font-family:'Rubik',sans-serif; text-transform:none; letter-spacing:0; }
+  .start-btn:hover{ transform: translateX(4px); } html[dir="rtl"] .start-btn:hover{ transform: translateX(-4px); }
+  .entry-foot{ position:absolute; bottom:3vh; left:6vw; right:6vw; display:flex; justify-content:space-between; font-family:'Barlow Condensed',sans-serif; font-size:0.75rem; letter-spacing:0.18em; color:rgba(255,255,255,0.65); }
+  body.lang-he .entry-foot{ font-family:'Rubik',sans-serif; letter-spacing:0; }
+
+  /* ---------- HUB ---------- */
+  .quest{ background:var(--ink); padding:4vh 6vw 8vh; }
+  .topbar{ display:flex; align-items:center; justify-content:space-between; margin-bottom:3vh; flex-wrap:wrap; gap:1rem; }
+  .topbar .logo{ font-weight:800; letter-spacing:0.03em; font-size:1.1rem; color:var(--gold); font-family:'Barlow Condensed',sans-serif; }
+  body.lang-he .topbar .logo{ font-family:'Rubik',sans-serif; }
+  .score-pill{ background:var(--anu-blue); padding:0.5rem 1.1rem; border-radius:999px; font-family:'Barlow Condensed',sans-serif; font-weight:800; font-size:0.95rem; display:flex; align-items:center; gap:0.5rem; }
+  body.lang-he .score-pill{ font-family:'Rubik',sans-serif; }
+  .quest-header{ margin-bottom:3vh; }
+  .quest-header h2{ font-size:clamp(1.8rem,4.5vw,2.8rem); margin:0 0 0.5rem; }
+  .quest-header p{ color:rgba(255,255,255,0.75); max-width:560px; line-height:1.6; margin:0; }
+  .mission-grid{ display:grid; grid-template-columns: repeat(auto-fill, minmax(250px,1fr)); gap:1.2rem; }
+  .mission-card{ background:linear-gradient(165deg, var(--anu-blue-deep), #1c1240); border-radius:6px; padding:1.3rem; border:1.5px solid var(--line); cursor:pointer; min-height:170px; display:flex; flex-direction:column; text-align:inherit; color:inherit; transition:transform .15s ease, border-color .15s ease; }
+  html[dir="rtl"] .mission-card{ text-align:right; }
+  .mission-card:hover{ transform:translateY(-3px); border-color:var(--gold); }
+  .mission-card.done{ background:linear-gradient(165deg, #123322, #0c1f17); border-color:var(--good); }
+  .mission-tag{ font-family:'Barlow Condensed',sans-serif; font-weight:700; letter-spacing:0.12em; font-size:0.68rem; color:var(--gold); margin-bottom:0.5rem; }
+  body.lang-he .mission-tag{ font-family:'Rubik',sans-serif; letter-spacing:0; }
+  .mission-card.done .mission-tag{ color:var(--good); }
+  .mission-title{ font-size:1.05rem; font-weight:600; line-height:1.4; margin-bottom:0.5rem; flex:1; }
+  .mission-foot{ display:flex; justify-content:space-between; font-family:'Barlow Condensed',sans-serif; font-size:0.82rem; }
+  body.lang-he .mission-foot{ font-family:'Rubik',sans-serif; }
+  .pts{ color:rgba(255,255,255,0.6); }
+  .progress-track{ height:6px; background:rgba(255,255,255,0.12); border-radius:3px; overflow:hidden; margin: 2vh 0 1vh; }
+  .progress-fill{ height:100%; background:var(--gold); width:0%; transition:width .5s ease; }
+  .gallery-link{ display:inline-flex; align-items:center; gap:0.5rem; margin-bottom:3vh; font-family:'Barlow Condensed',sans-serif; font-size:0.85rem; color:rgba(255,255,255,0.7); background:none; border:none; cursor:pointer; padding:0; }
+  body.lang-he .gallery-link{ font-family:'Rubik',sans-serif; }
+  .gallery-link:hover{ color:var(--gold); }
+
+  /* ---- modal (mission) ---- */
+  .modal-backdrop{ display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:50; align-items:center; justify-content:center; padding:5vw; }
+  .modal-backdrop.active{ display:flex; }
+  .modal{ background:var(--ink); border:1.5px solid var(--line); border-radius:6px; max-width:540px; width:100%; padding:2rem; position:relative; max-height:90vh; overflow-y:auto; }
+  .modal-close{ position:absolute; top:1rem; right:1.2rem; background:none; border:none; color:rgba(255,255,255,0.6); font-size:1.4rem; cursor:pointer; padding:0.3rem 0.6rem; }
+  html[dir="rtl"] .modal-close{ right:auto; left:1.2rem; }
+  .modal-tag{ font-family:'Barlow Condensed',sans-serif; font-weight:700; letter-spacing:0.15em; color:var(--gold); font-size:0.78rem; margin-bottom:0.6rem; }
+  body.lang-he .modal-tag{ font-family:'Rubik',sans-serif; letter-spacing:0; }
+  .modal h3{ font-size:1.5rem; margin:0 0 1rem; }
+  .modal .desc{ color:rgba(255,255,255,0.8); line-height:1.6; margin-bottom:1.4rem; font-size:0.95rem; }
+
+  .scan-zone{ position:relative; background:linear-gradient(160deg, var(--anu-blue-deep), var(--anu-blue)); border-radius:6px; aspect-ratio:4/3; display:flex; align-items:center; justify-content:center; overflow:hidden; margin-bottom:1rem; }
+  .scan-zone .art{ font-size:4rem; filter:blur(14px) brightness(0.6); transition:filter .25s ease; }
+  .scan-zone.captured .art{ display:none; }
+  .scan-video, .scan-canvas{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:none; }
+  .scan-zone.camera-live .scan-video{ display:block; }
+  .scan-zone.captured .scan-canvas{ display:block; }
+  .scan-overlay{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:0.7rem; text-align:center; padding:1rem; background:rgba(11,11,20,0.35); }
+  .scan-zone.camera-live .scan-overlay{ background:transparent; align-items:flex-end; padding-bottom:1rem; }
+  .scan-zone.captured .scan-overlay{ background:rgba(11,11,20,0.45); }
+  .scan-hint-text{ font-family:'Barlow Condensed',sans-serif; letter-spacing:0.1em; font-size:0.75rem; color:var(--gold); max-width:230px; }
+  body.lang-he .scan-hint-text{ font-family:'Rubik',sans-serif; letter-spacing:0; }
+  .scan-btn{ background:var(--gold); color:var(--ink); border:none; padding:0.6rem 1.2rem; border-radius:999px; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:0.82rem; cursor:pointer; }
+  body.lang-he .scan-btn{ font-family:'Rubik',sans-serif; }
+  .scan-btn.secondary{ background:transparent; border:1.5px solid var(--white); color:var(--white); }
+  .scan-btn-row{ display:flex; gap:0.6rem; flex-wrap:wrap; justify-content:center; }
+  .scan-status{ font-size:0.76rem; color:rgba(255,255,255,0.65); margin-top:0.3rem; min-height:1.1em; }
+  .scan-status.error{ color:var(--bad); } .scan-status.success{ color:var(--good); }
+
+  .response-area{ display:none; } .response-area.active{ display:block; }
+  .reflect-label{ font-family:'Barlow Condensed',sans-serif; font-weight:700; letter-spacing:0.08em; font-size:0.78rem; color:rgba(255,255,255,0.6); margin-bottom:0.6rem; text-transform:uppercase; }
+  body.lang-he .reflect-label{ font-family:'Rubik',sans-serif; letter-spacing:0; text-transform:none; }
+  textarea.reflect-input{ width:100%; min-height:70px; background:rgba(255,255,255,0.06); border:1.5px solid var(--line); border-radius:4px; color:var(--white); padding:0.75rem; font-family:inherit; font-size:0.9rem; resize:vertical; margin-bottom:1.2rem; }
+  textarea.reflect-input:focus{ outline:none; border-color:var(--gold); }
+  .chip-row{ display:flex; flex-wrap:wrap; gap:0.55rem; margin-bottom:1.2rem; }
+  .chip{ background:transparent; border:1.5px solid var(--line); color:var(--white); padding:0.45rem 0.95rem; border-radius:999px; font-size:0.82rem; cursor:pointer; font-family:inherit; }
+  .chip[aria-pressed="true"]{ background:var(--gold); color:var(--ink); border-color:var(--gold); font-weight:600; }
+  .complete-btn{ background:var(--good); color:var(--ink); border:none; padding:0.8rem 1.6rem; font-family:'Barlow Condensed',sans-serif; font-weight:800; text-transform:uppercase; letter-spacing:0.04em; font-size:0.9rem; cursor:pointer; opacity:0.35; pointer-events:none; clip-path: polygon(5% 0,100% 0,95% 100%,0 100%); }
+  body.lang-he .complete-btn{ font-family:'Rubik',sans-serif; text-transform:none; letter-spacing:0; }
+  .complete-btn.ready{ opacity:1; pointer-events:auto; }
+
+  /* ---- gallery ---- */
+  .gallery-head{ text-align:center; margin-bottom:4vh; }
+  .gallery-head h2{ font-size:clamp(2rem,5.5vw,3.2rem); margin:0.4rem 0 0; }
+  .photo-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:1rem; margin-bottom:3vh; }
+  .photo-card{ background:rgba(255,255,255,0.04); border-radius:6px; overflow:hidden; border:1.5px solid var(--line); }
+  .photo-card img{ width:100%; aspect-ratio:4/3; object-fit:cover; display:block; }
+  .photo-card .cap{ padding:0.6rem 0.7rem; font-size:0.76rem; color:rgba(255,255,255,0.75); line-height:1.4; }
+  .photo-empty{ color:rgba(255,255,255,0.5); font-size:0.9rem; text-align:center; padding:2rem 0; grid-column:1/-1; }
+  .action-row{ display:flex; gap:1rem; flex-wrap:wrap; justify-content:center; margin-bottom:1.5rem; }
+  .primary-btn{ background:var(--gold); color:var(--ink); border:none; padding:0.9rem 1.9rem; font-family:'Barlow Condensed',sans-serif; font-weight:800; text-transform:uppercase; letter-spacing:0.04em; font-size:0.95rem; cursor:pointer; clip-path: polygon(5% 0,100% 0,95% 100%,0 100%); transition: transform .15s ease; }
+  body.lang-he .primary-btn{ font-family:'Rubik',sans-serif; text-transform:none; letter-spacing:0; }
+  .primary-btn:hover{ transform:translateX(3px); }
+  .ghost-btn{ background:transparent; border:1.5px solid var(--line); color:var(--white); padding:0.85rem 1.8rem; border-radius:999px; font-family:'Barlow Condensed',sans-serif; letter-spacing:0.05em; font-size:0.9rem; cursor:pointer; }
+  body.lang-he .ghost-btn{ font-family:'Rubik',sans-serif; letter-spacing:0; }
+  .ghost-btn:hover{ border-color:var(--gold); color:var(--gold); }
+  .ghost-btn:disabled{ opacity:0.4; pointer-events:none; }
+
+  /* ---- AI identity page ---- */
+  .identity-card{ background:linear-gradient(160deg, var(--anu-blue-deep), var(--anu-blue)); border-radius:8px; padding:2.2rem; margin-bottom:3vh; position:relative; overflow:hidden; }
+  .identity-card::after{ content:""; position:absolute; inset:0; background-image: repeating-linear-gradient(115deg, rgba(255,255,255,0.04) 0 2px, transparent 2px 100px); pointer-events:none; }
+  .identity-tag{ font-family:'Barlow Condensed',sans-serif; font-weight:700; letter-spacing:0.15em; font-size:0.75rem; color:var(--gold); margin-bottom:0.8rem; }
+  body.lang-he .identity-tag{ font-family:'Rubik',sans-serif; letter-spacing:0; }
+  .identity-text{ font-size:1.15rem; line-height:1.7; color:var(--white); position:relative; max-width:640px; }
+  .keyword-row{ display:flex; flex-wrap:wrap; gap:0.6rem; margin-top:1.6rem; position:relative; }
+  .keyword-pill{ background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.3); padding:0.4rem 0.9rem; border-radius:999px; font-size:0.82rem; font-family:'Barlow Condensed',sans-serif; letter-spacing:0.04em; }
+  body.lang-he .keyword-pill{ font-family:'Rubik',sans-serif; letter-spacing:0; }
+  .ai-disclaimer{ font-size:0.78rem; color:rgba(255,255,255,0.5); margin-bottom:2.5vh; line-height:1.5; }
+  .loading-state{ text-align:center; padding:4vh 0; color:rgba(255,255,255,0.7); font-family:'Barlow Condensed',sans-serif; letter-spacing:0.08em; }
+  body.lang-he .loading-state{ font-family:'Rubik',sans-serif; letter-spacing:0; }
+  .loading-ring{ width:48px; height:48px; border:3px solid var(--line); border-top-color:var(--gold); border-radius:50%; margin:0 auto 1rem; animation:spin 1s linear infinite; }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  /* ---- photobooth ---- */
+  .booth-stage{ position:relative; max-width:480px; margin:0 auto 1.5rem; border-radius:10px; overflow:hidden; aspect-ratio:4/3; background:var(--ink); border:3px solid var(--gold); box-shadow: inset 0 0 0 8px var(--anu-blue); }
+  .booth-video, .booth-canvas{ position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:none; }
+  .booth-stage.live .booth-video{ display:block; }
+  .booth-stage.captured .booth-canvas{ display:block; }
+  .booth-placeholder{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font-size:3.5rem; opacity:0.4; }
+
+  .footer-credit{ text-align:center; margin-top:4vh; font-size:0.72rem; letter-spacing:0.12em; color:rgba(255,255,255,0.4); font-family:'Barlow Condensed',sans-serif; }
+  body.lang-he .footer-credit{ font-family:'Rubik',sans-serif; letter-spacing:0; }
+  .small-note{ font-size:0.78rem; color:rgba(255,255,255,0.5); margin-top:1rem; line-height:1.5; }
+  .center-text{ text-align:center; }
+</style>
+</head>
+<body class="lang-en">
+<a href="#mainContent" class="skip-link">Skip to content</a>
+<div class="lang-toggle" role="group" aria-label="Language / שפה">
+  <button id="btnEn" onclick="setLang('en')" aria-pressed="true">EN</button>
+  <button id="btnHe" onclick="setLang('he')" aria-pressed="false">עברית</button>
+</div>
+
+<main id="mainContent">
+
+<!-- 1. ENTRY -->
+<section class="screen active" id="screen-entry">
+  <div class="entry">
+    <div class="eyebrow" data-i18n="eyebrow"></div>
+    <h1 data-i18n="title"></h1>
+    <p class="lede" data-i18n="lede"></p>
+    <button type="button" class="start-btn" onclick="goTo('hub')" data-i18n="startBtn"></button>
+  </div>
+  <div class="entry-foot">
+    <span data-i18n="footMissions"></span>
+    <span data-i18n="footPhotos"></span>
+    <span data-i18n="footFinale"></span>
+  </div>
+</section>
+
+<!-- 2. HUB -->
+<section class="screen" id="screen-hub">
+  <div class="quest">
+    <div class="topbar">
+      <div class="logo" data-i18n="logo"></div>
+      <div class="score-pill" role="status" aria-live="polite"><span aria-hidden="true">★</span><span id="scoreDisplay"></span></div>
+    </div>
+    <div class="quest-header">
+      <h2 data-i18n="hubTitle"></h2>
+      <p data-i18n="hubDesc"></p>
+    </div>
+    <div class="progress-track"><div class="progress-fill" id="hubProgress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div>
+    <button type="button" class="gallery-link" onclick="goTo('gallery')">
+      <span aria-hidden="true">🖼️</span><span data-i18n="viewGalleryLink"></span> (<span id="photoCountHub">0</span>)
+    </button>
+    <div class="mission-grid" id="missionGrid"></div>
+  </div>
+</section>
+
+<!-- 3. GALLERY -->
+<section class="screen" id="screen-gallery">
+  <div class="wrap-wide">
+    <div class="gallery-head">
+      <div class="eyebrow" data-i18n="galleryEyebrow"></div>
+      <h2 data-i18n="galleryTitle"></h2>
+    </div>
+    <div class="photo-grid" id="photoGrid"></div>
+    <div class="action-row">
+      <button type="button" class="primary-btn" id="generateBtn" onclick="goTo('identity')" data-i18n="generateBtn"></button>
+      <button type="button" class="ghost-btn" onclick="goTo('hub')" data-i18n="backToQuest"></button>
+    </div>
+    <div class="footer-credit" data-i18n="footerCredit"></div>
+  </div>
+</section>
+
+<!-- 4. AI IDENTITY PAGE -->
+<section class="screen" id="screen-identity">
+  <div class="wrap">
+    <div class="gallery-head">
+      <div class="eyebrow" data-i18n="identityEyebrow"></div>
+      <h2 data-i18n="identityTitle"></h2>
+    </div>
+    <div id="identityLoading" class="loading-state">
+      <div class="loading-ring" aria-hidden="true"></div>
+      <div data-i18n="generatingText"></div>
+    </div>
+    <div id="identityContent" style="display:none;">
+      <div class="identity-card">
+        <div class="identity-tag" data-i18n="identityCardTag"></div>
+        <div class="identity-text" id="identityParagraph"></div>
+        <div class="keyword-row" id="identityKeywords"></div>
+      </div>
+      <p class="ai-disclaimer" data-i18n="aiDisclaimer"></p>
+      <div class="action-row">
+        <button type="button" class="primary-btn" onclick="goTo('booth')" data-i18n="toBoothBtn"></button>
+        <button type="button" class="ghost-btn" onclick="goTo('gallery')" data-i18n="backToGallery"></button>
+      </div>
+    </div>
+    <div class="footer-credit" data-i18n="footerCredit"></div>
+  </div>
+</section>
+
+<!-- 5. PHOTOBOOTH (final page) -->
+<section class="screen" id="screen-booth">
+  <div class="wrap">
+    <div class="gallery-head">
+      <div class="eyebrow" data-i18n="boothEyebrow"></div>
+      <h2 data-i18n="boothTitle"></h2>
+      <p class="small-note center-text" data-i18n="boothDesc"></p>
+    </div>
+
+    <div class="booth-stage" id="boothStage">
+      <div class="booth-placeholder" id="boothPlaceholder">🤳</div>
+      <video class="booth-video" id="boothVideo" autoplay muted playsinline aria-hidden="true"></video>
+      <canvas class="booth-canvas" id="boothCanvas" aria-hidden="true"></canvas>
+    </div>
+
+    <div class="scan-status center-text" id="boothStatus" role="status" aria-live="polite"></div>
+    <div class="action-row" id="boothControls"></div>
+
+    <button type="button" class="ghost-btn" onclick="goTo('identity')" data-i18n="backToReflection" style="display:block; margin:0 auto;"></button>
+    <div class="footer-credit" data-i18n="footerCredit"></div>
+  </div>
+</section>
+
+</main>
+
+<!-- MISSION MODAL -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" id="modalDialog">
+    <button class="modal-close" onclick="closeModal()" data-i18n-aria="closeAria">×</button>
+    <div class="modal-tag" id="modalTag"></div>
+    <h3 id="modalTitle">—</h3>
+    <p class="desc" id="modalDesc"></p>
+    <div class="scan-zone" id="scanZone">
+      <div class="art" id="modalArt" aria-hidden="true"></div>
+      <video class="scan-video" id="scanVideo" autoplay muted playsinline aria-hidden="true"></video>
+      <canvas class="scan-canvas" id="scanCanvas" aria-hidden="true"></canvas>
+      <div class="scan-overlay" id="scanOverlay"></div>
+    </div>
+    <div class="scan-status" id="scanStatus" role="status" aria-live="polite"></div>
+    <div class="response-area" id="responseArea">
+      <div id="responseInner"></div>
+      <button class="complete-btn" id="completeBtn" onclick="completeMission()"></button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============== I18N ============== */
+const STR = {
+  en:{
+    eyebrow:"ANU — Museum of the Jewish People", title:"Museum Quest",
+    lede:"Six missions are hidden across the museum floors. Scan each artifact with your camera, answer a quick question, and watch your photo collection grow. At the end, you'll get a personal reflection built from what you found — and a chance to take your own ANU photo.",
+    startBtn:"Begin the quest →", footMissions:"6 missions", footPhotos:"Photo collection", footFinale:"Photo booth finale",
+    logo:"ANU", hubTitle:"Your missions",
+    hubDesc:"Tap any mission to view it. Find the matching object on the floor, scan it with your camera, then answer to bank your points.",
+    ptsLabel:"PTS", completedTag:"Completed", viewGalleryLink:"View your photo gallery",
+    galleryEyebrow:"Your collection", galleryTitle:"Photo Gallery",
+    generateBtn:"Generate my reflection →", backToQuest:"← Back to missions",
+    photoEmpty:"No photos yet — scan an artifact to start your collection.",
+    identityEyebrow:"Built from your visit", identityTitle:"Your Identity Reflection",
+    identityCardTag:"AI-generated, from your answers", generatingText:"Reading your answers and photos…",
+    aiDisclaimer:"This reflection is generated from the choices and reflections you made during your quest — a starting point for conversation, not a definition.",
+    toBoothBtn:"Continue to the photo booth →", backToGallery:"← Back to gallery",
+    boothEyebrow:"One last stop", boothTitle:"ANU Photo Booth",
+    boothDesc:"Take a selfie to remember your visit — branded with ANU, ready to share.",
+    openBoothCam:"Open camera", captureBtn:"Take photo", retakeBtn:"Retake",
+    downloadBoothBtn:"Download photo", shareBoothBtn:"Share photo",
+    backToReflection:"← Back to your reflection",
+    permDenied:"Camera permission was denied. Try again or check your browser settings.",
+    notSupported:"Camera isn't available on this device or browser.",
+    boothCaptured:"Photo captured!", requestingCam:"Requesting camera access…",
+    closeAria:"Close mission", missionTagPrefix:"Mission", reactionLabel:"What's your reaction?",
+    reflectionLabel:"Your reflection", completeBtn:"Claim points →", alreadyDone:"Mission already complete",
+    openCamera:"Open camera to scan", capture:"Capture", retake:"Scan again", simulate:"No camera? Tap to simulate",
+    scanPermDenied:"Camera permission was denied. You can still simulate the scan below.",
+    scanNotSupported:"Camera isn't available on this device or browser. Use the simulate button instead.",
+    captured:"Artwork scanned",
+    footerCredit:"Museum Quest — a prototype for ANU Museum of the Jewish People",
+  },
+  he:{
+    eyebrow:"אנו — מוזיאון העם היהודי", title:"מסע המוזיאון",
+    lede:"שש משימות מוסתרות ברחבי קומות המוזיאון. סרקו כל יצירה עם המצלמה, ענו על שאלה קצרה, וצפו באוסף התמונות שלכם גדל. בסוף תקבלו רפלקציה אישית שנבנתה ממה שמצאתם — והזדמנות לצלם תמונה משלכם באנו.",
+    startBtn:"התחילו את המסע ←", footMissions:"6 משימות", footPhotos:"אוסף תמונות", footFinale:"עמדת צילום בסיום",
+    logo:"אנו", hubTitle:"המשימות שלכם",
+    hubDesc:"הקישו על משימה כדי לצפות בה. מצאו את החפץ המתאים בקומה, סרקו אותו עם המצלמה, ואז ענו כדי לצבור נקודות.",
+    ptsLabel:"נק'", completedTag:"הושלם", viewGalleryLink:"צפו בגלריית התמונות שלכם",
+    galleryEyebrow:"האוסף שלכם", galleryTitle:"גלריית תמונות",
+    generateBtn:"צרו את הרפלקציה שלי ←", backToQuest:"חזרה למשימות →",
+    photoEmpty:"עדיין אין תמונות — סרקו יצירה כדי להתחיל את האוסף שלכם.",
+    identityEyebrow:"נבנה מהביקור שלכם", identityTitle:"הרפלקציה הזהותית שלכם",
+    identityCardTag:"נוצר על ידי AI, מהתשובות שלכם", generatingText:"קוראים את התשובות והתמונות שלכם…",
+    aiDisclaimer:"הרפלקציה הזו נוצרה מהבחירות והתשובות שנתתם במהלך המסע — נקודת פתיחה לשיחה, לא הגדרה.",
+    toBoothBtn:"המשיכו לעמדת הצילום ←", backToGallery:"חזרה לגלריה →",
+    boothEyebrow:"תחנה אחרונה", boothTitle:"עמדת הצילום של אנו",
+    boothDesc:"צלמו סלפי לזכר הביקור — עם המיתוג של אנו, מוכן לשיתוף.",
+    openBoothCam:"פתחו מצלמה", captureBtn:"צלמו תמונה", retakeBtn:"צלמו שוב",
+    downloadBoothBtn:"הורידו תמונה", shareBoothBtn:"שתפו תמונה",
+    backToReflection:"חזרה לרפלקציה שלכם →",
+    permDenied:"הגישה למצלמה נדחתה. נסו שוב או בדקו את הגדרות הדפדפן.",
+    notSupported:"המצלמה אינה זמינה במכשיר או בדפדפן הזה.",
+    boothCaptured:"התמונה צולמה!", requestingCam:"מבקש גישה למצלמה…",
+    closeAria:"סגירת המשימה", missionTagPrefix:"משימה", reactionLabel:"מה התגובה שלכם?",
+    reflectionLabel:"הרשמים שלכם", completeBtn:"קבלו נקודות ←", alreadyDone:"המשימה הושלמה",
+    openCamera:"פתחו מצלמה לסריקה", capture:"צלמו", retake:"סרקו מחדש", simulate:"אין מצלמה? הקישו לדמות סריקה",
+    scanPermDenied:"הגישה למצלמה נדחתה. אפשר לדמות את הסריקה למטה.",
+    scanNotSupported:"המצלמה אינה זמינה במכשיר הזה. השתמשו בכפתור הדימוי.",
+    captured:"היצירה נסרקה",
+    footerCredit:"מסע המוזיאון — אבטיפוס למוזיאון אנו - העם היהודי",
+  }
+};
+
+/* Each mission tags its chip choices with identity "themes" so we can synthesize the AI reflection later. */
+const MISSIONS = [
+  { art:"🏺", pts:15, type:"chip",
+    title:{en:"Find an object older than 1,000 years", he:"מצאו חפץ שגילו עולה על 1,000 שנה"},
+    desc:{en:"Somewhere on the floors is an artifact whose age outlasts most languages. Scan it when you find it.", he:"אי שם בקומות מסתתר חפץ עתיק יותר מרוב השפות המדוברות. סרקו אותו כשתמצאו אותו."},
+    chips:{ en:["It feels ancient and distant","It feels surprisingly familiar","Hard to imagine that span of time","Makes today feel small"],
+            he:["מרגיש עתיק ומרוחק","מרגיש מוכר באופן מפתיע","קשה לתפוס פרק זמן כזה","מקטין את ההווה בעיניי"] },
+    theme:"memory" },
+  { art:"💡", pts:10, type:"text",
+    title:{en:"Find something that surprised you", he:"מצאו דבר שהפתיע אתכם"},
+    desc:{en:"Not the most famous piece — the one you didn't expect. Scan it, then tell us what caught you off guard.", he:"לא היצירה המוכרת ביותר — זו שלא ציפיתם לה. סרקו אותה וכתבו מה הפתיע אתכם."},
+    placeholder:{en:"What surprised you about it, and why?", he:"מה הפתיע אתכם בה, ולמה?"},
+    theme:"curiosity" },
+  { art:"🏠", pts:10, type:"text",
+    title:{en:"Which object would you bring home, and why?", he:"איזה חפץ הייתם לוקחים הביתה, ולמה?"},
+    desc:{en:"Pick one piece you'd want to keep. Scan it, then explain your choice.", he:"בחרו יצירה אחת שהייתם רוצים לשמור. סרקו אותה והסבירו את הבחירה."},
+    placeholder:{en:"What would you bring home, and why?", he:"מה הייתם לוקחים הביתה, ולמה?"},
+    theme:"belonging" },
+  { art:"🧬", pts:15, type:"chip",
+    title:{en:"Find an artifact connected to your family's heritage", he:"מצאו חפץ המחובר למורשת המשפחה שלכם"},
+    desc:{en:"It doesn't need to be exact — a region, a tradition, a language, a craft. Scan whatever feels closest.", he:"לא צריך להיות מדויק — אזור, מסורת, שפה, מלאכה. סרקו את מה שמרגיש הכי קרוב."},
+    chips:{ en:["Direct family connection","Connected to my broader community","No connection, but it resonated anyway","Made me curious to ask my family more"],
+            he:["קשר ישיר למשפחה שלי","קשר לקהילה הרחבה שלי","אין קשר, אבל זה עדיין נגע בי","עורר בי רצון לשאול את משפחתי עוד"] },
+    theme:"heritage" },
+  { art:"🤝", pts:10, type:"chip",
+    title:{en:"Find an object made through collaboration", he:"מצאו יצירה שנוצרה בשיתוף פעולה"},
+    desc:{en:"Some pieces were made by one hand. Others took hundreds. Find one built by many people together.", he:"יצירות מסוימות נוצרו ביד אחת. אחרות דרשו מאות. מצאו יצירה שנבנתה בשיתוף."},
+    chips:{ en:["Stronger because many people made it","Loses something without a single author","Both at once","Changed how I think about authorship"],
+            he:["חזקה יותר כי אנשים רבים יצרו אותה","מאבדת משהו בלי יוצר בודד","גם וגם","שינתה איך אני חושב/ת על יצירה"] },
+    theme:"community" },
+  { art:"🖼️", pts:10, type:"text",
+    title:{en:"Find an object that tells a story without using words", he:"מצאו יצירה שמספרת סיפור בלי מילים"},
+    desc:{en:"No label, no text — just form, material, and placement. Describe the story in your own words.", he:"בלי תווית, בלי טקסט — רק צורה וחומר. תארו את הסיפור במילים שלכם."},
+    placeholder:{en:"What story does it tell?", he:"איזה סיפור היא מספרת?"},
+    theme:"interpretation" }
+];
+
+const THEME_LABEL = {
+  memory:{en:"memory", he:"זיכרון"}, curiosity:{en:"curiosity", he:"סקרנות"},
+  belonging:{en:"belonging", he:"שייכות"}, heritage:{en:"heritage", he:"מורשת"},
+  community:{en:"community", he:"קהילה"}, interpretation:{en:"interpretation", he:"פרשנות"}
+};
+
+let lang = localStorage.getItem('mq_lang') || 'en';
+function t(key){ return STR[lang][key]; }
+
+function setLang(l){
+  lang = l; localStorage.setItem('mq_lang', lang);
+  document.documentElement.lang = lang;
+  document.documentElement.dir = lang==='he' ? 'rtl' : 'ltr';
+  document.body.classList.toggle('lang-he', lang==='he');
+  document.body.classList.toggle('lang-en', lang==='en');
+  document.getElementById('btnEn').setAttribute('aria-pressed', lang==='en');
+  document.getElementById('btnHe').setAttribute('aria-pressed', lang==='he');
+  document.getElementById('btnEn').classList.toggle('active', lang==='en');
+  document.getElementById('btnHe').classList.toggle('active', lang==='he');
+  document.title = lang==='he' ? 'מסע המוזיאון — אנו' : 'Museum Quest — ANU Museum';
+  renderStatic();
+  if(currentScreen==='hub') renderHub();
+  if(currentScreen==='gallery') renderGallery();
+  if(currentScreen==='identity' && identityGenerated) renderIdentity();
+  if(document.getElementById('modalBackdrop').classList.contains('active')) renderModalContent();
+}
+function renderStatic(){
+  document.querySelectorAll('[data-i18n]').forEach(el=> el.textContent = t(el.getAttribute('data-i18n')));
+  document.querySelectorAll('[data-i18n-aria]').forEach(el=> el.setAttribute('aria-label', t(el.getAttribute('data-i18n-aria'))));
+  const sd = document.getElementById('scoreDisplay'); if(sd) sd.textContent = score + ' ' + t('ptsLabel');
+}
+function capitalize(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+
+/* ============== STATE ============== */
+let currentScreen = 'entry';
+let score = 0;
+let completed = new Set();
+let activeMission = null;
+let scanned = false;
+let pendingResponse = null;
+let mediaStream = null;
+let scanState = 'idle';
+let lastCaptureDataUrl = null;
+let photos = []; // {missionIndex, title, dataUrl, ts}
+let reflections = {}; // missionIndex -> {theme, answer}
+let identityGenerated = false;
+
+function goTo(screen){
+  currentScreen = screen;
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+screen).classList.add('active');
+  if(screen==='hub') renderHub();
+  if(screen==='gallery') renderGallery();
+  if(screen==='identity') startIdentityGeneration();
+  if(screen==='booth') resetBoothUI();
+}
+
+/* ============== HUB ============== */
+function renderHub(){
+  const grid = document.getElementById('missionGrid');
+  grid.innerHTML='';
+  MISSIONS.forEach((m, i)=>{
+    const done = completed.has(i);
+    const card = document.createElement('button');
+    card.type='button';
+    card.className = 'mission-card' + (done?' done':'');
+    card.onclick = ()=> openMission(i);
+    card.innerHTML = `
+      <div class="mission-tag">${done ? t('completedTag') : (t('missionTagPrefix')+' 0'+(i+1))}</div>
+      <div class="mission-title">${m.title[lang]}</div>
+      <div class="mission-foot"><span class="pts">${m.pts} ${t('ptsLabel')}</span><span aria-hidden="true">${done?'✓':(lang==='he'?'←':'→')}</span></div>`;
+    grid.appendChild(card);
+  });
+  document.getElementById('scoreDisplay').textContent = score + ' ' + t('ptsLabel');
+  document.getElementById('photoCountHub').textContent = photos.length;
+  const pct = Math.round(completed.size / MISSIONS.length * 100);
+  const fill = document.getElementById('hubProgress');
+  fill.style.width = pct + '%'; fill.setAttribute('aria-valuenow', pct);
+}
+
+/* ============== MISSION MODAL ============== */
+function openMission(i){
+  activeMission = i;
+  scanned = completed.has(i);
+  pendingResponse = completed.has(i) ? true : null;
+  scanState = scanned ? 'captured' : 'idle';
+  stopCamera();
+  renderModalContent();
+  document.getElementById('modalBackdrop').classList.add('active');
+  document.getElementById('modalDialog').focus();
+}
+function renderModalContent(){
+  const m = MISSIONS[activeMission];
+  const alreadyDone = completed.has(activeMission);
+  document.getElementById('modalTag').textContent = t('missionTagPrefix') + ' 0' + (activeMission+1);
+  document.getElementById('modalTitle').textContent = m.title[lang];
+  document.getElementById('modalDesc').textContent = m.desc[lang];
+  document.getElementById('modalArt').textContent = m.art;
+  renderScanZone();
+  const respArea = document.getElementById('responseArea');
+  respArea.classList.toggle('active', scanned);
+  const inner = document.getElementById('responseInner');
+  if(m.type === 'chip'){
+    inner.innerHTML = `<div class="reflect-label">${t('reactionLabel')}</div><div class="chip-row" id="modalChips"></div>`;
+    const row = document.getElementById('modalChips');
+    m.chips[lang].forEach(c=>{
+      const b = document.createElement('button');
+      b.type='button'; b.className='chip';
+      b.setAttribute('aria-pressed', pendingResponse===c ? 'true':'false');
+      b.textContent=c;
+      b.onclick=()=>{
+        if(!scanned || alreadyDone) return;
+        [...row.children].forEach(x=>x.setAttribute('aria-pressed','false'));
+        b.setAttribute('aria-pressed','true');
+        pendingResponse = c; updateCompleteBtn();
+      };
+      row.appendChild(b);
+    });
+  } else {
+    inner.innerHTML = `<div class="reflect-label">${t('reflectionLabel')}</div><textarea class="reflect-input" id="modalTextarea" placeholder="${m.placeholder[lang]}"></textarea>`;
+    const ta = document.getElementById('modalTextarea');
+    ta.disabled = alreadyDone;
+    ta.oninput = ()=>{ pendingResponse = ta.value.trim().length>2 ? ta.value.trim() : null; updateCompleteBtn(); };
+  }
+  updateCompleteBtn();
+}
+
+/* ============== CAMERA (mission scan) ============== */
+function cameraSupported(){ return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia); }
+function renderScanZone(){
+  const zone = document.getElementById('scanZone');
+  zone.classList.remove('camera-live','captured');
+  const overlay = document.getElementById('scanOverlay');
+  const status = document.getElementById('scanStatus');
+  status.className = 'scan-status';
+  document.getElementById('modalArt').style.display = 'flex';
+  if(scanState==='idle'){
+    overlay.innerHTML = `<div class="scan-btn-row">
+      <button type="button" class="scan-btn" onclick="openCamera()">${t('openCamera')}</button>
+      <button type="button" class="scan-btn secondary" onclick="simulateScan()">${t('simulate')}</button></div>`;
+    status.textContent = '';
+  } else if(scanState==='requesting'){
+    overlay.innerHTML = `<div class="scan-hint-text">${t('requestingCam')}</div>`;
+    status.textContent = t('requestingCam');
+  } else if(scanState==='live'){
+    zone.classList.add('camera-live');
+    document.getElementById('modalArt').style.display='none';
+    overlay.innerHTML = `<div class="scan-btn-row"><button type="button" class="scan-btn" onclick="capturePhoto()">${t('capture')}</button></div>`;
+    status.textContent = '';
+  } else if(scanState==='denied'){
+    overlay.innerHTML = `<div class="scan-hint-text">${t('scanPermDenied')}</div><div class="scan-btn-row"><button type="button" class="scan-btn secondary" onclick="simulateScan()">${t('simulate')}</button></div>`;
+    status.textContent = t('scanPermDenied'); status.classList.add('error');
+  } else if(scanState==='unsupported'){
+    overlay.innerHTML = `<div class="scan-hint-text">${t('scanNotSupported')}</div><div class="scan-btn-row"><button type="button" class="scan-btn secondary" onclick="simulateScan()">${t('simulate')}</button></div>`;
+    status.textContent = t('scanNotSupported'); status.classList.add('error');
+  } else if(scanState==='captured'){
+    zone.classList.add('captured');
+    document.getElementById('modalArt').style.display='none';
+    const alreadyDone = completed.has(activeMission);
+    overlay.innerHTML = alreadyDone ? '' : `<div class="scan-btn-row"><button type="button" class="scan-btn secondary" onclick="retake()">${t('retake')}</button></div>`;
+    status.textContent = t('captured'); status.classList.add('success');
+  }
+}
+async function openCamera(){
+  if(!cameraSupported()){ scanState='unsupported'; renderScanZone(); return; }
+  scanState='requesting'; renderScanZone();
+  try{
+    mediaStream = await navigator.mediaDevices.getUserMedia({ video:{ facingMode:{ ideal:'environment' } }, audio:false });
+    const video = document.getElementById('scanVideo');
+    video.srcObject = mediaStream; await video.play();
+    scanState='live'; renderScanZone();
+  }catch(e){ scanState='denied'; renderScanZone(); }
+}
+function capturePhoto(){
+  const video = document.getElementById('scanVideo');
+  const canvas = document.getElementById('scanCanvas');
+  const w = video.videoWidth||640, h = video.videoHeight||480;
+  canvas.width=w; canvas.height=h;
+  canvas.getContext('2d').drawImage(video,0,0,w,h);
+  lastCaptureDataUrl = canvas.toDataURL('image/jpeg', 0.82);
+  stopCamera();
+  scanned = true; scanState='captured';
+  renderScanZone();
+  document.getElementById('responseArea').classList.add('active');
+  updateCompleteBtn();
+}
+function simulateScan(){
+  scanned = true; scanState='captured';
+  const canvas = document.getElementById('scanCanvas');
+  canvas.width=640; canvas.height=480;
+  const ctx = canvas.getContext('2d');
+  ctx.fillStyle='#160D99'; ctx.fillRect(0,0,640,480);
+  ctx.font='120px sans-serif'; ctx.textAlign='center';
+  ctx.fillText(MISSIONS[activeMission].art, 320, 280);
+  lastCaptureDataUrl = canvas.toDataURL('image/jpeg', 0.82);
+  renderScanZone();
+  document.getElementById('responseArea').classList.add('active');
+  updateCompleteBtn();
+}
+function retake(){
+  scanned=false; scanState='idle'; pendingResponse=null;
+  document.getElementById('responseArea').classList.remove('active');
+  renderScanZone(); renderModalContent();
+}
+function stopCamera(){ if(mediaStream){ mediaStream.getTracks().forEach(tr=>tr.stop()); mediaStream=null; } }
+
+/* ============== COMPLETION → SAVE TO PHOTO INDEX ============== */
+function updateCompleteBtn(){
+  const btn = document.getElementById('completeBtn');
+  const alreadyDone = completed.has(activeMission);
+  const ready = scanned && pendingResponse && !alreadyDone;
+  btn.classList.toggle('ready', ready);
+  btn.textContent = alreadyDone ? t('alreadyDone') : t('completeBtn');
+}
+function completeMission(){
+  if(completed.has(activeMission)) return;
+  if(!(scanned && pendingResponse)) return;
+  const m = MISSIONS[activeMission];
+  completed.add(activeMission);
+  score += m.pts;
+  reflections[activeMission] = { theme:m.theme, answer:pendingResponse };
+  if(lastCaptureDataUrl){
+    photos.push({ missionIndex:activeMission, title:m.title[lang], dataUrl:lastCaptureDataUrl, ts:Date.now() });
+    lastCaptureDataUrl = null;
+  }
+  closeModal();
+  renderHub();
+  if(completed.size === MISSIONS.length){
+    setTimeout(()=> goTo('gallery'), 400);
+  }
+}
+function closeModal(){ stopCamera(); document.getElementById('modalBackdrop').classList.remove('active'); }
+document.getElementById('modalBackdrop').addEventListener('click', e=>{ if(e.target.id==='modalBackdrop') closeModal(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && document.getElementById('modalBackdrop').classList.contains('active')) closeModal(); });
+
+/* ============== GALLERY ============== */
+function renderGallery(){
+  const grid = document.getElementById('photoGrid');
+  if(photos.length===0){
+    grid.innerHTML = `<div class="photo-empty">${t('photoEmpty')}</div>`;
+  } else {
+    grid.innerHTML = photos.map(p=>`
+      <div class="photo-card">
+        <img src="${p.dataUrl}" alt="${p.title}">
+        <div class="cap">${p.title}</div>
+      </div>`).join('');
+  }
+  document.getElementById('generateBtn').disabled = completed.size < MISSIONS.length;
+}
+
+/* ============== AI IDENTITY REFLECTION ============== */
+function startIdentityGeneration(){
+  identityGenerated = false;
+  document.getElementById('identityLoading').style.display = 'block';
+  document.getElementById('identityContent').style.display = 'none';
+  setTimeout(()=>{ renderIdentity(); identityGenerated = true; }, 1400);
+}
+
+const OPENERS = {
+  en:[
+    "Across the museum, your choices kept circling back to {top}.",
+    "Walking the galleries, what stood out most was a thread of {top}.",
+    "Your visit traced a clear line through {top}."
+  ],
+  he:[
+    "לאורך כל המוזיאון, הבחירות שלכם חזרו שוב ושוב ל{top}.",
+    "בהליכה בין הגלריות, מה שבלט ביותר היה חוט של {top}.",
+    "הביקור שלכם שרטט קו ברור דרך {top}."
+  ]
+};
+const CLOSERS = {
+  en:[
+    "That's not the whole story of who you are — but it's a real piece of it, and a good place to keep asking questions.",
+    "None of this defines you on its own. It's a snapshot of one walk through one museum, worth carrying forward into a conversation.",
+    "Identity rarely fits in six stops. What you collected today is an opening, not an answer."
+  ],
+  he:[
+    "זה לא כל הסיפור של מי שאתם — אבל זה חלק אמיתי ממנו, ומקום טוב להמשיך לשאול שאלות.",
+    "שום דבר מכל זה לא מגדיר אתכם בפני עצמו. זו תמונת מצב של הליכה אחת במוזיאון אחד, ששווה לקחת איתכם לשיחה.",
+    "זהות לעיתים רחוקות נכנסת לשש תחנות. מה שאספתם היום הוא פתח, לא תשובה."
+  ]
+};
+
+function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
+
+function buildIdentityText(){
+  const counts = {};
+  Object.values(reflections).forEach(r=>{ counts[r.theme] = (counts[r.theme]||0)+1; });
+  const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  const topThemes = sorted.slice(0,3).map(([theme])=> THEME_LABEL[theme][lang]);
+  const topPhrase = topThemes.length>1
+    ? topThemes.slice(0,-1).join(lang==='he' ? '־' : ', ') + (lang==='he' ? ' ו' : ' and ') + topThemes[topThemes.length-1]
+    : (topThemes[0] || (lang==='he' ? 'תהייה שקטה' : 'quiet wondering'));
+
+  let opener = pick(OPENERS[lang]).replace('{top}', topPhrase);
+
+  // pull in 1-2 of the student's own short text answers verbatim, lightly framed
+  const textAnswers = Object.values(reflections).filter(r=> typeof r.answer === 'string' && r.answer.length>3 && r.answer.split(' ').length>2);
+  let middle = '';
+  if(textAnswers.length){
+    const sample = textAnswers[0].answer;
+    middle = lang==='he'
+      ? ` באחת התחנות כתבתם: "${sample}" — משפט קטן שמספר הרבה.`
+      : ` At one stop, you wrote: "${sample}" — a small line that says a lot.`;
+  }
+
+  const closer = ' ' + pick(CLOSERS[lang]);
+  return opener + middle + closer;
+}
+
+function renderIdentity(){
+  document.getElementById('identityLoading').style.display = 'none';
+  document.getElementById('identityContent').style.display = 'block';
+  document.getElementById('identityParagraph').textContent = buildIdentityText();
+
+  const counts = {};
+  Object.values(reflections).forEach(r=>{ counts[r.theme] = (counts[r.theme]||0)+1; });
+  const sorted = Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+  const kwWrap = document.getElementById('identityKeywords');
+  kwWrap.innerHTML = sorted.map(([theme,count])=>
+    `<span class="keyword-pill">${THEME_LABEL[theme][lang]} ×${count}</span>`).join('');
+}
+
+/* ============== PHOTOBOOTH (final page) ============== */
+let boothStream = null;
+let boothState = 'idle';
+
+function resetBoothUI(){
+  boothState='idle';
+  document.getElementById('boothPlaceholder').style.display='flex';
+  document.getElementById('boothVideo').style.display='none';
+  document.getElementById('boothCanvas').style.display='none';
+  document.getElementById('boothStage').classList.remove('live','captured');
+  renderBoothControls();
+}
+function renderBoothControls(){
+  const row = document.getElementById('boothControls');
+  const status = document.getElementById('boothStatus');
+  status.className = 'scan-status center-text';
+  if(boothState==='idle'){
+    row.innerHTML = `<button type="button" class="primary-btn" onclick="openBoothCamera()">${t('openBoothCam')}</button>`;
+    status.textContent='';
+  } else if(boothState==='requesting'){
+    row.innerHTML=''; status.textContent = t('requestingCam');
+  } else if(boothState==='live'){
+    row.innerHTML = `<button type="button" class="primary-btn" onclick="captureBooth()">${t('captureBtn')}</button>`;
+    status.textContent='';
+  } else if(boothState==='denied' || boothState==='unsupported'){
+    row.innerHTML = `<button type="button" class="ghost-btn" onclick="openBoothCamera()">${t('openBoothCam')}</button>`;
+    status.textContent = boothState==='denied' ? t('permDenied') : t('notSupported');
+    status.classList.add('error');
+  } else if(boothState==='captured'){
+    row.innerHTML = `
+      <button type="button" class="ghost-btn" onclick="retakeBooth()">${t('retakeBtn')}</button>
+      <button type="button" class="primary-btn" onclick="downloadBooth()">${t('downloadBoothBtn')}</button>
+      <button type="button" class="ghost-btn" onclick="shareBooth()">${t('shareBoothBtn')}</button>`;
+    status.textContent = t('boothCaptured'); status.classList.add('success');
+  }
+}
+async function openBoothCamera(){
+  if(!cameraSupported()){ boothState='unsupported'; renderBoothControls(); return; }
+  boothState='requesting'; renderBoothControls();
+  try{
+    boothStream = await navigator.mediaDevices.getUserMedia({ video:{ facingMode:{ ideal:'user' } }, audio:false });
+    const video = document.getElementById('boothVideo');
+    video.srcObject = boothStream; await video.play();
+    boothState='live';
+    document.getElementById('boothPlaceholder').style.display='none';
+    document.getElementById('boothVideo').style.display='block';
+    document.getElementById('boothStage').classList.add('live');
+    renderBoothControls();
+  }catch(e){ boothState='denied'; renderBoothControls(); }
+}
+function captureBooth(){
+  const video = document.getElementById('boothVideo');
+  const canvas = document.getElementById('boothCanvas');
+  const w = video.videoWidth||640, h = video.videoHeight||480;
+  canvas.width=w; canvas.height=h;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(video,0,0,w,h);
+
+  // ANU branding overlay
+  const borderW = Math.round(w*0.035);
+  ctx.strokeStyle = '#2814FF'; ctx.lineWidth = borderW;
+  ctx.strokeRect(borderW/2, borderW/2, w-borderW, h-borderW);
+  const barH = h*0.11;
+  ctx.fillStyle = '#2814FF';
+  ctx.fillRect(0, h-barH, w, barH);
+  ctx.fillStyle = '#FFFFFF';
+  ctx.textAlign = 'center';
+  ctx.font = `800 ${Math.round(barH*0.42)}px 'Barlow Condensed', sans-serif`;
+  ctx.fillText('ANU', w/2, h - barH*0.52);
+  ctx.font = `600 ${Math.round(barH*0.2)}px sans-serif`;
+  ctx.fillText('MUSEUM OF THE JEWISH PEOPLE', w/2, h - barH*0.18);
+
+  stopBoothCamera();
+  boothState='captured';
+  document.getElementById('boothVideo').style.display='none';
+  document.getElementById('boothCanvas').style.display='block';
+  document.getElementById('boothStage').classList.remove('live');
+  document.getElementById('boothStage').classList.add('captured');
+  renderBoothControls();
+}
+function retakeBooth(){
+  document.getElementById('boothStage').classList.remove('captured');
+  document.getElementById('boothCanvas').style.display='none';
+  document.getElementById('boothPlaceholder').style.display='flex';
+  boothState='idle';
+  renderBoothControls();
+}
+function stopBoothCamera(){ if(boothStream){ boothStream.getTracks().forEach(tr=>tr.stop()); boothStream=null; } }
+function downloadBooth(){
+  const canvas = document.getElementById('boothCanvas');
+  const link = document.createElement('a');
+  link.download = 'anu-photobooth.png';
+  link.href = canvas.toDataURL('image/png');
+  link.click();
+}
+function shareBooth(){
+  const canvas = document.getElementById('boothCanvas');
+  canvas.toBlob(async (blob)=>{
+    if(!blob) return;
+    const file = new File([blob], 'anu-photobooth.png', { type:'image/png' });
+    if(navigator.canShare && navigator.canShare({ files:[file] })){
+      try{ await navigator.share({ files:[file], title:'ANU Museum Quest' }); }
+      catch(e){ /* cancelled */ }
+    } else { downloadBooth(); }
+  }, 'image/png');
+}
+
+/* ============== INIT ============== */
+setLang(lang);
+</script>
+</body>
+</html>
