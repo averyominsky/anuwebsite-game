@@ -1,6 +1,3 @@
-bash
-
-cat > /mnt/user-data/outputs/museum-quest.html << 'ENDOFFILE'
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
@@ -38,8 +35,8 @@ button{font-family:inherit;cursor:pointer;}
 .screen.active{display:flex;flex-direction:column;}
 
 /* ── LANG TOGGLE ─────────────────────────────────── */
-.lang-toggle{position:fixed;top:1rem;right:1rem;z-index:200;display:flex;background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.25);border-radius:999px;padding:3px;}
-html[dir=rtl] .lang-toggle{right:auto;left:1rem;}
+.lang-toggle{position:fixed;top:13px;right:16px;z-index:200;display:flex;background:rgba(255,255,255,0.15);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.25);border-radius:999px;padding:3px;}
+html[dir=rtl] .lang-toggle{right:auto;left:16px;}
 .lang-toggle button{border:none;background:transparent;color:var(--white);padding:4px 12px;border-radius:999px;font-size:12px;font-weight:600;}
 .lang-toggle button.active{background:var(--gold);color:var(--ink);}
 body.light .lang-toggle{background:rgba(40,20,255,0.1);border-color:rgba(40,20,255,0.2);}
@@ -66,8 +63,11 @@ body.light .lang-toggle button.active{background:var(--blue);color:var(--white);
 .logo-img.loaded{display:block;}
 
 /* ── STEP DOTS ─────────────────────────────────── */
-.step-dots{display:flex;align-items:center;justify-content:center;gap:8px;padding:4px 0 20px;flex-shrink:0;}
-.step-dot{width:24px;height:4px;border-radius:2px;background:rgba(255,255,255,0.25);}
+.step-dots{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  padding:16px 0;flex-shrink:0;
+}
+.step-dot{width:24px;height:4px;border-radius:2px;background:rgba(255,255,255,0.3);}
 .step-dot.active{background:var(--white);width:32px;}
 
 /* ── ENTRY ─────────────────────────────────────── */
@@ -253,30 +253,58 @@ textarea.q-text:focus{outline:none;border-color:var(--blue);}
 .claim-btn{width:100%;background:var(--blue);color:var(--white);border:none;padding:16px;border-radius:999px;font-size:16px;font-weight:700;opacity:.3;pointer-events:none;transition:opacity .2s;}
 .claim-btn.ready{opacity:1;pointer-events:auto;}
 
-
-.site-header {
-  padding: 20px 40px;
-}
-
-.header-image {
-  width: 120px;
-}
-
-
 /* ── STATUS BADGE ────────────────────────────── */
 .status-ok{color:var(--done);} .status-err{color:var(--bad);}
 
 /* ── UTILS ───────────────────────────────────── */
 .footer-credit{text-align:center;font-size:10px;letter-spacing:0.08em;color:var(--muted-dark);padding:24px 0 0;opacity:.5;}
 body.lang-he .footer-credit{letter-spacing:0;}
+
+/* ── GLOBAL HEADER ───────────────────────────────── */
+.global-header{
+  position:fixed;top:0;left:0;right:0;z-index:150;
+  display:flex;align-items:center;justify-content:flex-start;
+  padding:10px 18px;
+  background:rgba(40,20,255,0.92);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(255,255,255,0.1);
+  height:54px;
+}
+body.light .global-header{
+  background:rgba(255,255,255,0.95);
+  border-bottom:1px solid rgba(40,20,255,0.1);
+}
+.global-header-logo{
+  height:32px;width:auto;object-fit:contain;display:block;
+}
+.global-header-placeholder{
+  height:32px;display:flex;align-items:center;
+  font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:20px;
+  color:rgba(255,255,255,0.9);letter-spacing:0.02em;
+}
+body.light .global-header-placeholder{color:var(--blue);}
+
+/* push all screens down below the fixed header */
+.screen{padding-top:54px;}
+
 </style>
 </head>
 <body class="lang-en">
 
-  <header class="site-header">
-  <img src="anuheader.jpg" alt="Logo" class="header-image">
+<!-- ═══════════════════════════════════
+  GLOBAL HEADER — logo right corner, all pages
+  ★ TO ADD YOUR LOGO: set src="your-logo.png" on the img below
+════════════════════════════════════ -->
+<header class="global-header" role="banner">
+  <img
+    class="global-header-logo"
+    id="globalLogoImg"
+    src="anuheader.jpg"
+    alt="ANU Museum of the Jewish People"
+    onerror="this.style.display='none';document.getElementById('globalLogoFallback').style.display='flex';"
+  >
+  <div class="global-header-placeholder" id="globalLogoFallback" style="display:none;">ANU Quest</div>
 </header>
-
 
 <div class="lang-toggle" role="group" aria-label="Language / שפה">
   <button id="btnEn" onclick="setLang('en')" class="active" aria-pressed="true">EN</button>
@@ -287,21 +315,20 @@ body.lang-he .footer-credit{letter-spacing:0;}
   1. ENTRY  (blue)
 ════════════════════════════════════ -->
 <section class="screen active" id="s-entry">
-  <div class="entry-hero">
-
-    
-    <!-- ★ REPLACE: ANU Quest logo — set src="your-anuquest-logo.png" -->
-    <div class="img-placeholder quest-logo-ph" id="questLogoPh" style="height:80px;width:220px;">
-      <img class="logo-img" src="anuheader.jpg" alt="ANU Quest"
-           onload="this.classList.add('loaded');document.getElementById('questLogoPh').style.border='none';document.getElementById('questLogoPh').style.background='transparent';"
-           onerror="this.style.display='none'">
-    </div>
-
-    <button class="pill-btn" onclick="goTo('experience')" data-i18n="getStarted">Get Started</button>
-  </div>
   <div class="step-dots">
     <div class="step-dot active"></div>
     <div class="step-dot"></div>
+  </div>
+  <div class="entry-hero">
+    <!-- ★ REPLACE: ANU Quest logo — set src="your-anuquest-logo.png" -->
+    <div class="img-placeholder quest-logo-ph" id="questLogoPh" style="height:90px;width:240px;">
+      <span class="ph-icon">🖼</span>
+      <span>ANU Quest Logo</span>
+      <img class="logo-img" src="" alt="ANU Quest"
+           onload="this.classList.add('loaded');document.getElementById('questLogoPh').style.border='none';document.getElementById('questLogoPh').style.background='transparent';"
+           onerror="this.style.display='none'">
+    </div>
+    <button class="pill-btn" onclick="goTo('experience')" data-i18n="getStarted">Get Started</button>
   </div>
 </section>
 
@@ -309,17 +336,6 @@ body.lang-he .footer-credit{letter-spacing:0;}
   2. FIND YOUR EXPERIENCE  (blue)
 ════════════════════════════════════ -->
 <section class="screen" id="s-experience">
-  <div class="exp-header">
-    <!-- ★ REPLACE: ANU logo on experience screen — set src="your-anu-logo.png" -->
-    <div class="img-placeholder exp-logo-ph" id="expLogoPh">
-      <span class="ph-icon">🖼</span>
-      <span>ANU Logo</span>
-      <img class="logo-img" src="" alt="ANU Museum Logo"
-           onload="this.classList.add('loaded');document.getElementById('expLogoPh').style.border='none';document.getElementById('expLogoPh').style.background='transparent';"
-           onerror="this.style.display='none'">
-    </div>
-  </div>
-
   <div class="step-dots">
     <div class="step-dot"></div>
     <div class="step-dot active"></div>
@@ -327,8 +343,7 @@ body.lang-he .footer-credit{letter-spacing:0;}
 
   <div class="exp-body">
     <div>
-      <div class="exp-section-label" data-i18n="findExp">Find Your Experience</div>
-      <div class="exp-headline" data-i18n="chooseAdventure">Choose your adventure</div>
+      <div class="exp-headline" data-i18n="chooseAdventure">Find Your Experience</div>
       <div class="exp-sub" data-i18n="tapToBegin">Tap a card to begin.</div>
     </div>
 
@@ -354,7 +369,7 @@ body.lang-he .footer-credit{letter-spacing:0;}
       </div>
       <div class="exp-card-footer">
         <span aria-hidden="true">📅</span>
-        <span data-i18n="dateRange">25 July – Ongoing</span>
+        <span data-i18n="dateRange">26 July – Ongoing</span>
       </div>
     </button>
 
@@ -366,14 +381,7 @@ body.lang-he .footer-credit{letter-spacing:0;}
 ════════════════════════════════════ -->
 <section class="screen" id="s-hub">
   <div class="light-topbar">
-    <!-- ★ REPLACE: ANU logo in hub — set src="your-anu-logo-dark.png" -->
-    <div class="img-placeholder lt-logo-ph" id="hubLogoPh" style="border-color:rgba(40,20,255,0.2);background:var(--blue-light);">
-      <img class="logo-img" src="" alt="ANU"
-           onload="this.classList.add('loaded');document.getElementById('hubLogoPh').style.border='none';document.getElementById('hubLogoPh').style.background='transparent';"
-           onerror="this.style.display='none'">
-      <!-- fallback text if no image provided -->
-      <span style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:18px;color:var(--blue);display:none;" id="hubLogoFallback">ANU Quest</span>
-    </div>
+    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;color:var(--blue);letter-spacing:0.04em;" data-i18n="hubTitle">Your Missions</div>
     <div class="lt-score" role="status" aria-live="polite">★ <span id="scoreDisplay">0</span> <span data-i18n="score" style="font-size:14px;font-weight:500;opacity:.7;">pts</span></div>
   </div>
 
@@ -492,12 +500,11 @@ body.lang-he .footer-credit{letter-spacing:0;}
 const S = {
   en:{
     getStarted:"Get Started",
-    findExp:"Find Your Experience",
-    chooseAdventure:"Choose your adventure",
+    chooseAdventure:"Find Your Experience",
     tapToBegin:"Tap a card to begin.",
     expTitle:"A Virtual Quest",
     expDesc:"An interactive family adventure for ages 8–12, uncovering ANU's stories through challenges and artifact discoveries.",
-    dateRange:"25 July – Ongoing",
+    dateRange:"26 July – Ongoing",
     galleryLink:"Photo gallery",
     galleryTitle:"Your Gallery",
     footerCredit:"ANU Quest — Museum of the Jewish People",
@@ -713,13 +720,6 @@ function renderHub(){
   fill.style.width=pct+'%';fill.setAttribute('aria-valuenow',pct);
   document.getElementById('progressLabel').textContent=`${completed.size}/${ALL_MISSIONS.length} ${t('progressLabel')}`;
   document.getElementById('progressPct').textContent=pct+'%';
-  // show fallback text logo if img placeholder is empty
-  const ph=document.getElementById('hubLogoPh');
-  if(ph&&!ph.querySelector('.logo-img.loaded')){
-    const fb=document.getElementById('hubLogoFallback');
-    if(fb)fb.style.display='block';
-    ph.style.border='none';ph.style.background='transparent';
-  }
 }
 
 /* ═══════════ MODAL ═══════════ */
@@ -940,7 +940,3 @@ setLang(lang);
 </script>
 </body>
 </html>
-ENDOFFILE
-Output
-
-exit code 0
