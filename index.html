@@ -348,32 +348,46 @@ body.light .global-header-placeholder{color:var(--blue);}
     </div>
 
     <!-- Quest card -->
-    <button class="exp-card" onclick="goTo('hub')" aria-label="Start the Virtual Quest">
-      <div class="exp-card-inner">
+   <button class="exp-card" onclick="goTo('hub')" aria-label="Start the Virtual Quest">
+  <div class="exp-card-inner">
 
-        <!-- ★ REPLACE: card image — set src="your-card-image.jpg" inside this div -->
-        <div class="card-image-ph" id="cardImagePh">
-          <div class="ph-inner">
-            <span>🖼</span>
-            <span style="font-size:9px;max-width:56px;">Add image</span>
-          </div>
-          <img src="" alt="Virtual Quest"
-               onload="this.classList.add('loaded');document.querySelector('.card-image-ph .ph-inner').style.display='none';"
-               onerror="this.style.display='none'">
-        </div>
+    <!-- Card image -->
+    <div class="card-image-ph" id="cardImagePh">
+      <img src="anuoutside.jpg" alt="Virtual Quest">
+    </div>
 
-        <div class="exp-card-body">
-          <div class="exp-card-title" data-i18n="expTitle">A Virtual Quest</div>
-          <div class="exp-card-desc" data-i18n="expDesc">An interactive family adventure for ages 8–12, uncovering ANU's stories through challenges and artifact discoveries.</div>
-        </div>
+    <div class="exp-card-body">
+      <div class="exp-card-title" data-i18n="expTitle">A Virtual Quest</div>
+      <div class="exp-card-desc" data-i18n="expDesc">
+        An interactive family adventure for ages 8–12, uncovering ANU's stories through challenges and artifact discoveries.
       </div>
-      <div class="exp-card-footer">
-        <span aria-hidden="true">📅</span>
-        <span data-i18n="dateRange">26 July – Ongoing</span>
-      </div>
-    </button>
+    </div>
 
   </div>
+
+  <div class="exp-card-footer">
+    <svg xmlns="http://www.w3.org/2000/svg"
+         width="16"
+         height="16"
+         viewBox="0 0 24 24"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2"
+         stroke-linecap="round"
+         stroke-linejoin="round"
+         aria-hidden="true">
+      <path d="M8 2v4"/>
+      <path d="M16 2v4"/>
+      <rect x="3" y="4" width="18" height="18" rx="2"/>
+      <path d="M3 10h18"/>
+    </svg>
+
+    <span data-i18n="dateRange">26 July – Ongoing</span>
+  </div>
+
+</button>
+
+</div>
 </section>
 
 <!-- ═══════════════════════════════════
@@ -552,7 +566,7 @@ const S = {
     tapToBegin:"הקישו על כרטיס להתחלה.",
     expTitle:"מסע וירטואלי",
     expDesc:"הרפתקה אינטראקטיבית למשפחות בגילאי 8–12, המגלה את סיפורי אנו דרך אתגרים וגילוי חפצים.",
-    dateRange:"25 ביולי – בלתי מוגבל",
+    dateRange:"26 ביולי – בלתי מוגבל",
     galleryLink:"גלריית תמונות",
     galleryTitle:"הגלריה שלכם",
     footerCredit:"קווסט אנו — מוזיאון העם היהודי",
