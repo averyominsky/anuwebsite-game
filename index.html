@@ -113,7 +113,6 @@ body.lang-he .pill-btn{font-family:'Rubik',sans-serif;}
   }
   50% {
     transform: translateY(-4px);
-    box-shadow: 0 0 20px rgba(255,255,255,0.7);
   }
 }
 
@@ -304,18 +303,23 @@ body.lang-he .footer-credit{letter-spacing:0;}
 .global-header{
   position:fixed;top:0;left:0;right:0;z-index:150;
   display:flex;align-items:center;justify-content:flex-start;
-  padding:10px 18px;
+  padding:8px 18px;
   background:rgba(40,20,255,0.92);
   backdrop-filter:blur(10px);
   border-bottom:1px solid rgba(255,255,255,0.1);
   height:54px;
 }
-body.light .global-header{
-  background:rgba(255,255,255,0.95);
-  border-bottom:1px solid rgba(40,20,255,0.1);
+body.light .global-header,
+body.header-image .global-header{
+  background:#fff;
+  border-bottom:1px solid rgba(20,20,20,0.08);
+  backdrop-filter:none;
 }
 .global-header-logo{
-  height:32px;width:auto;object-fit:contain;display:block;
+  height:36px;width:auto;max-width:calc(100vw - 36px);object-fit:contain;display:block;
+}
+body.header-image .global-header-logo{
+  height:40px;
 }
 .global-header-placeholder{
   height:32px;display:flex;align-items:center;
@@ -326,6 +330,255 @@ body.light .global-header-placeholder{color:var(--blue);}
 
 /* push all screens down below the fixed header */
 .screen{padding-top:54px;}
+body.no-global-header .global-header{display:none;}
+body.no-global-header .screen{padding-top:0;}
+
+/* ── ADVENTURE HUB ─────────────────────────────── */
+.adventure-hub{background:var(--paper);color:var(--ink);min-height:100dvh;padding:26px 20px 42px;overflow-y:auto;}
+.adventure-intro{max-width:760px;margin:0 auto;padding:8px 0 28px;}
+.adventure-kicker,.section-kicker{font-size:10px;font-weight:800;letter-spacing:.16em;color:var(--blue);text-transform:uppercase;}
+.adventure-intro h1{font-family:'Barlow Condensed',sans-serif;font-size:48px;line-height:.95;margin:5px 0 12px;}
+.adventure-intro p{max-width:620px;font-size:15px;line-height:1.65;color:var(--muted-dark);}
+.adventure-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:22px;}
+.adventure-steps>div{padding:14px;background:#fff;border:1px solid var(--line-light);border-radius:14px;}
+.adventure-steps span{display:block;font-size:10px;font-weight:800;color:var(--blue);margin-bottom:7px;}
+.adventure-steps strong{display:block;font-size:14px;margin-bottom:3px;}
+.adventure-steps small{display:block;color:var(--muted-dark);font-size:11px;line-height:1.45;}
+.adventure-section{max-width:760px;margin:0 auto 26px;}
+.adventure-section-head{display:flex;justify-content:space-between;align-items:end;gap:12px;margin-bottom:10px;}
+.adventure-section h2{font-family:'Barlow Condensed',sans-serif;font-size:30px;line-height:1;margin-top:3px;}
+.mini-photo-grid{min-height:88px;grid-template-columns:repeat(4,1fr);margin-bottom:0;}
+.mini-photo-grid .photo-empty{padding:22px 10px;font-size:12px;background:#fff;border-radius:12px;border:1px solid var(--line-light);}
+.mini-photo-grid .photo-card img{aspect-ratio:1/1;}
+.mini-photo-grid .photo-caption{display:none;}
+.floor-choice-list{display:flex;flex-direction:column;gap:9px;margin-top:13px;}
+.floor-choice{width:100%;display:flex;align-items:center;gap:14px;text-align:left;padding:18px 16px;border:1px solid var(--line-light);background:#fff;border-radius:15px;color:var(--ink);transition:transform .15s,box-shadow .15s;}
+.floor-choice:hover{transform:translateY(-1px);box-shadow:0 5px 18px rgba(0,0,0,.07);}
+.floor-choice-num{font-family:'Barlow Condensed',sans-serif;font-size:32px;font-weight:800;color:var(--blue);line-height:1;}
+.floor-choice-body{flex:1;}.floor-choice-body strong{display:block;font-size:15px;line-height:1.25;}.floor-choice-body span{display:block;color:var(--muted-dark);font-size:11px;margin-top:3px;}.floor-choice-arrow{font-size:24px;color:var(--blue);}
+.adventure-progress{max-width:760px;margin:6px auto 0;}
+@media(max-width:560px){.adventure-intro h1{font-size:42px}.adventure-steps{grid-template-columns:1fr;gap:7px}.adventure-steps>div{display:grid;grid-template-columns:35px 1fr;column-gap:8px;padding:11px}.adventure-steps span{grid-row:span 2;margin:0}.mini-photo-grid{grid-template-columns:repeat(3,1fr)}.adventure-section-head{align-items:center}}
+
+/* ── INSTRUCTIONS + FLOOR PAGES ───────────────────── */
+.instructions-screen,
+.floor-screen{
+  background:var(--paper);
+  color:var(--ink);
+  min-height:100dvh;
+}
+
+.instructions-header{
+  position:relative;
+  width:100%;
+  height:34vh;
+  min-height:220px;
+  max-height:360px;
+  overflow:hidden;
+  background:var(--blue);
+}
+.instructions-header img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.instructions-header::after{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to bottom,rgba(14,8,112,.05),rgba(14,8,112,.62));
+}
+.instructions-header-content{
+  position:absolute;
+  z-index:2;
+  left:20px;
+  right:20px;
+  bottom:22px;
+  color:var(--white);
+}
+.instructions-kicker{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  color:var(--gold);
+  margin-bottom:5px;
+}
+.instructions-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(32px,7vw,52px);
+  line-height:.95;
+  font-weight:800;
+}
+.instructions-body{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding:28px 20px 40px;
+  max-width:760px;
+  width:100%;
+  margin:0 auto;
+}
+.instructions-intro{
+  font-size:17px;
+  line-height:1.6;
+  margin-bottom:22px;
+}
+.instruction-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+.instruction-card{
+  background:var(--white);
+  border:1px solid var(--line-light);
+  border-radius:18px;
+  padding:18px 14px;
+  box-shadow:0 3px 16px rgba(0,0,0,.06);
+}
+.instruction-number{
+  font-family:'Barlow Condensed',sans-serif;
+  color:var(--blue);
+  font-size:28px;
+  font-weight:800;
+  line-height:1;
+  margin-bottom:8px;
+}
+.instruction-card h3{
+  font-size:15px;
+  margin-bottom:5px;
+}
+.instruction-card p{
+  font-size:12px;
+  color:var(--muted-dark);
+  line-height:1.55;
+}
+.instructions-actions{
+  margin-top:24px;
+  display:flex;
+  gap:10px;
+}
+.instructions-actions .full-btn{flex:1;}
+
+.floor-screen{
+  display:none;
+}
+.floor-screen.active{
+  display:flex;
+  flex-direction:column;
+}
+.floor-page-head{
+  padding:22px 20px 14px;
+  background:var(--white);
+  border-bottom:1px solid var(--line-light);
+}
+.floor-page-kicker{
+  color:var(--blue);
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  margin-bottom:5px;
+}
+.floor-page-title{
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:clamp(28px,6vw,44px);
+  line-height:1;
+  font-weight:800;
+  color:var(--ink);
+}
+.floor-page-sub{
+  color:var(--muted-dark);
+  font-size:13px;
+  margin-top:7px;
+}
+.floor-page-tabs{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  padding:12px 20px;
+  background:var(--white);
+  border-bottom:1px solid var(--line-light);
+}
+.floor-page-tab{
+  min-height:74px;
+  padding:10px 9px;
+  border:1.5px solid rgba(40,20,255,.18);
+  border-radius:14px;
+  background:var(--white);
+  color:var(--ink);
+  text-align:left;
+  font-weight:600;
+  font-size:11px;
+  line-height:1.25;
+}
+.floor-page-tab strong{
+  display:block;
+  color:var(--blue);
+  font-size:12px;
+  margin-bottom:4px;
+}
+.floor-page-tab.active{
+  background:var(--blue);
+  color:var(--white);
+  border-color:var(--blue);
+}
+.floor-page-tab.active strong{color:var(--gold);}
+.floor-tasks{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  padding:18px 20px 34px;
+  max-width:900px;
+  width:100%;
+  margin:0 auto;
+}
+.floor-tasks .missions-list{padding:0;}
+.floor-task-label{
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+  color:var(--blue);
+  margin-bottom:10px;
+}
+.global-back{
+  position:fixed !important;
+  bottom:16px !important;
+  left:16px !important;
+  z-index:1000 !important;
+  width:30px;
+  height:30px;
+  padding:0;
+  border:1px solid rgba(40,20,255,.16);
+  border-radius:50%;
+  background:rgba(255,255,255,.88);
+  color:rgba(40,20,255,.68);
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+  font-size:17px;
+  line-height:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  opacity:.9;
+  transition:opacity .2s,background .2s,transform .2s;
+}
+.global-back:hover{
+  opacity:1;
+  background:#fff;
+  transform:translateY(-1px);
+}
+html[dir=rtl] .global-back{left:auto !important;right:16px !important;}
+@media(max-width:600px){
+  .instruction-grid{grid-template-columns:1fr;}
+  .instruction-card{display:grid;grid-template-columns:40px 1fr;column-gap:10px;align-items:start;}
+  .instruction-number{grid-row:span 2;}
+  .instructions-actions{flex-direction:column;}
+  .floor-page-tabs{grid-template-columns:1fr;}
+  .floor-page-tab{min-height:auto;text-align:left;padding:12px 14px;}
+  .global-back{bottom:12px !important;left:12px !important;}
+}
 
 </style>
 </head>
@@ -346,7 +599,9 @@ body.light .global-header-placeholder{color:var(--blue);}
   <div class="global-header-placeholder" id="globalLogoFallback" style="display:none;">ANU Quest</div>
 </header>
 
-<div class="lang-toggle" role="group" aria-label="Language / שפה">
+<button class="global-back" id="globalBack" style="display:none;" onclick="goBack()" aria-label="Back">←</button>
+
+<div class="lang-toggle"  role="group" aria-label="Language / שפה">
   <button id="btnEn" onclick="setLang('en')" class="active" aria-pressed="true">EN</button>
   <button id="btnHe" onclick="setLang('he')" aria-pressed="false">עב</button>
 </div>
@@ -427,27 +682,47 @@ body.light .global-header-placeholder{color:var(--blue);}
 </section>
 
 <!-- ═══════════════════════════════════
-  3. MISSIONS HUB  (light)
+  4–6. FLOOR PAGES
+════════════════════════════════════ -->
+<section class="screen floor-screen" id="s-floor1"></section>
+<section class="screen floor-screen" id="s-floor2"></section>
+<section class="screen floor-screen" id="s-floor3"></section>
+
+<!-- ═══════════════════════════════════
+  3. YOUR ADVENTURE / ACTIVITY HUB  (light)
+  Intro instructions, photo gallery, and floor choices live together.
 ════════════════════════════════════ -->
 <section class="screen" id="s-hub">
-  <div class="light-topbar">
-    <div style="font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:16px;color:var(--blue);letter-spacing:0.04em;" data-i18n="hubTitle">Your Missions</div>
-    <div class="lt-score" role="status" aria-live="polite">★ <span id="scoreDisplay">0</span> <span data-i18n="score" style="font-size:14px;font-weight:500;opacity:.7;">pts</span></div>
-  </div>
+  <div class="adventure-hub">
+    <div class="adventure-intro">
+      <div class="adventure-kicker">ANU QUEST</div>
+      <h1>Your Adventure</h1>
+      <p>Explore each floor, answer the questions, and take photos along the way. When you finish, your choices and photos will come together to create your own gallery and final photoshoot.</p>
+      <div class="adventure-steps">
+        <div><span>01</span><strong>Explore</strong><small>Choose a floor and discover its stories.</small></div>
+        <div><span>02</span><strong>Answer</strong><small>Complete the activities on each floor.</small></div>
+        <div><span>03</span><strong>Capture</strong><small>Take photos to build your gallery.</small></div>
+      </div>
+    </div>
 
-  <div class="progress-wrap">
-    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div>
-    <div class="progress-meta"><span id="progressLabel"></span><span id="progressPct">0%</span></div>
-  </div>
+    <div class="adventure-section">
+      <div class="adventure-section-head">
+        <div><div class="section-kicker">YOUR PHOTOS</div><h2>Photo Gallery</h2></div>
+        <button class="gallery-chip" onclick="goTo('gallery')">📷 <span>View gallery</span> <span class="count" id="photoCount">0</span></button>
+      </div>
+      <div class="photo-grid mini-photo-grid" id="photoGridPreview"></div>
+    </div>
 
-  <button class="gallery-chip" onclick="goTo('gallery')">
-    📷 <span data-i18n="galleryLink">Photo gallery</span> <span class="count" id="photoCount">0</span>
-  </button>
+    <div class="adventure-section floors-section">
+      <div class="section-kicker">CHOOSE YOUR FLOOR</div>
+      <h2>Explore the Museum</h2>
+      <div class="floor-choice-list" id="floorTabs" role="tablist"></div>
+    </div>
 
-  <div class="floor-tabs" role="tablist" id="floorTabs"></div>
-
-  <div class="scroll-body" style="padding-top:0;">
-    <div class="missions-list" id="missionList"></div>
+    <div class="progress-wrap adventure-progress">
+      <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div></div>
+      <div class="progress-meta"><span id="progressLabel"></span><span id="progressPct">0%</span></div>
+    </div>
     <div class="footer-credit" data-i18n="footerCredit">ANU Quest — Museum of the Jewish People</div>
   </div>
 </section>
@@ -692,6 +967,7 @@ const THEME_LABELS={
 /* ═══════════ STATE ═══════════ */
 let lang=localStorage.getItem('aq_lang')||'en';
 let currentScreen='entry';
+let screenHistory=['entry'];
 let activeFloor=1;
 let activeMission=null;
 let scanned=false,scanState='idle',pendingAnswer=null,lastCapture=null;
@@ -712,6 +988,7 @@ function setLang(l){
   });
   applyStrings();
   if(currentScreen==='hub')renderHub();
+  if(currentScreen.startsWith('floor'))renderFloor(Number(currentScreen.replace('floor','')));
   if(currentScreen==='gallery')renderGallery();
   if(currentScreen==='identity'&&identityReady)renderIdentityResult();
   if(document.getElementById('modalBackdrop').classList.contains('active'))renderModal();
@@ -722,48 +999,109 @@ function applyStrings(){
 
 /* light/dark body toggle */
 const LIGHT_SCREENS=['hub','gallery','identity','booth'];
-function goTo(screen){
+function goTo(screen,addHistory=true){
+  if(addHistory && currentScreen!==screen){
+    screenHistory.push(screen);
+  }
   currentScreen=screen;
   document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById('s-'+screen).classList.add('active');
-  document.body.classList.toggle('light',LIGHT_SCREENS.includes(screen));
+  const target=document.getElementById('s-'+screen);
+  if(target) target.classList.add('active');
+  document.body.classList.toggle('light',LIGHT_SCREENS.includes(screen) || screen.startsWith('floor') || screen==='instructions');
+  document.body.classList.toggle('header-image', screen==='hub' || screen.startsWith('floor'));
+  document.body.classList.remove('no-global-header');
+  const logo=document.getElementById('globalLogoImg');
+  if(logo) logo.src=(screen==='hub' || screen.startsWith('floor'))?'anuheader2.jpg':'anuheader.jpg';
+  const back=document.getElementById('globalBack');
+  if(back) back.style.display=(screen==='entry')?'none':'flex';
   if(screen==='hub')renderHub();
   if(screen==='gallery')renderGallery();
   if(screen==='identity')startIdentity();
   if(screen==='booth')initBooth();
+  if(screen.startsWith('floor'))renderFloor(Number(screen.replace('floor','')));
+}
+function goBack(){
+  if(document.getElementById('modalBackdrop').classList.contains('active')){
+    closeModal();
+    return;
+  }
+  if(screenHistory.length>1){
+    screenHistory.pop();
+    const previous=screenHistory[screenHistory.length-1];
+    goTo(previous,false);
+  }else{
+    goTo('entry',false);
+  }
+}
+function goToFloor(n){
+  const screen='floor'+n;
+  activeFloor=n;
+  goTo(screen,false);
+}
+
+/* ═══════════ FLOOR PAGES ═══════════ */
+const FLOOR_NAMES={
+  1:{en:"First Floor: The Foundations – A Common Core, A Universal Message",he:"קומה ראשונה: היסודות – ליבה משותפת, מסר אוניברסלי"},
+  2:{en:"Second Floor: The Journey – The Jewish Story Through Time",he:"קומה שנייה: המסע – הסיפור היהודי לאורך הזמן"},
+  3:{en:"Third Floor: The Mosaic – Modern Jewish Identity and Culture",he:"קומה שלישית: הפסיפס – זהות ותרבות יהודית מודרנית"}
+};
+function renderFloor(n){
+  const el=document.getElementById('s-floor'+n);
+  if(!el)return;
+  const floor=FLOORS.find(f=>f.id===n);
+  const tabs=[3,2,1].map(i=>`<button class="floor-page-tab${i===n?' active':''}" onclick="goToFloor(${i})">
+    <strong>${i===3?'Third Floor':i===2?'Second Floor':'First Floor'}</strong>${FLOOR_NAMES[i][lang]}
+  </button>`).join('');
+  const missions=floor.missions.map(m=>{
+    const done=completed.has(m.id);
+    return `<button class="mission-card${done?' done':''}" onclick="openMission(${m.id})">
+      <div class="mission-icon">${m.art}</div>
+      <div class="mission-body">
+        <div class="mission-label">${done?t('completedTag'):(t('missionPrefix')+' '+(m.id+1))}</div>
+        <div class="mission-title">${m.title[lang]}</div>
+        <div class="mission-pts">${m.pts} ${t('score')}</div>
+      </div>
+      <div class="${done?'mission-check':'mission-arrow'}">${done?'✓':'›'}</div>
+    </button>`;
+  }).join('');
+  el.innerHTML=`
+    <div class="floor-page-head">
+      <div class="floor-page-kicker">${t('chooseFloor')}</div>
+      <div class="floor-page-title">${FLOOR_NAMES[n][lang]}</div>
+      <div class="floor-page-sub">${t('exploreFloor')}</div>
+    </div>
+    <div class="floor-page-tabs" role="tablist">${tabs}</div>
+    <div class="floor-tasks">
+      <div class="floor-task-label">${t('tasksTitle')}</div>
+      <div class="missions-list">${missions}</div>
+      <div class="cta-stack" style="margin-top:18px;">
+        <button class="full-btn ghost" onclick="goTo('gallery')">📷 ${t('galleryLink')} · ${photos.length}</button>
+        <button class="full-btn ghost" onclick="goBack()">← ${t('back')}</button>
+      </div>
+    </div>`;
 }
 
 /* ═══════════ HUB ═══════════ */
 function renderHub(){
   const tabs=document.getElementById('floorTabs');
   tabs.innerHTML='';
-  FLOORS.forEach(f=>{
+  [3,2,1].forEach(i=>{
+    const f=FLOORS.find(x=>x.id===i);
     const done=f.missions.filter(m=>completed.has(m.id)).length;
     const btn=document.createElement('button');
-    btn.className='floor-tab'+(activeFloor===f.id?' active':'');
-    btn.setAttribute('role','tab');btn.setAttribute('aria-selected',activeFloor===f.id);
-    btn.textContent=`${t('floorLabel')} ${f.id}   ${done}/${f.missions.length}`;
-    btn.onclick=()=>{activeFloor=f.id;renderHub();};
+    btn.className='floor-choice';
+    btn.setAttribute('role','tab');
+    btn.innerHTML=`<div class="floor-choice-num">${i}</div><div class="floor-choice-body"><strong>${FLOOR_NAMES[i][lang]}</strong><span>${done}/${f.missions.length} activities completed</span></div><div class="floor-choice-arrow">›</div>`;
+    btn.onclick=()=>goToFloor(i);
     tabs.appendChild(btn);
   });
-  const floor=FLOORS.find(f=>f.id===activeFloor);
-  const list=document.getElementById('missionList');
-  list.innerHTML='';
-  floor.missions.forEach(m=>{
-    const done=completed.has(m.id);
-    const btn=document.createElement('button');
-    btn.className='mission-card'+(done?' done':'');
-    btn.onclick=()=>openMission(m.id);
-    btn.innerHTML=`<div class="mission-icon">${m.art}</div>
-      <div class="mission-body">
-        <div class="mission-label">${done?t('completedTag'):(t('missionPrefix')+' '+(m.id+1))}</div>
-        <div class="mission-title">${m.title[lang]}</div>
-        <div class="mission-pts">${m.pts} ${t('score')}</div>
-      </div>
-      <div class="${done?'mission-check':'mission-arrow'}">${done?'✓':'›'}</div>`;
-    list.appendChild(btn);
-  });
-  document.getElementById('scoreDisplay').textContent=score;
+
+  const preview=document.getElementById('photoGridPreview');
+  if(photos.length===0){
+    preview.innerHTML=`<div class="photo-empty">Your photos will appear here as you complete the adventure.</div>`;
+  }else{
+    preview.innerHTML=photos.slice(-4).reverse().map(p=>`<div class="photo-card"><img src="${p.dataUrl}" alt="${p.title}"></div>`).join('');
+  }
   document.getElementById('photoCount').textContent=photos.length;
   const pct=Math.round(completed.size/ALL_MISSIONS.length*100);
   const fill=document.getElementById('progressFill');
