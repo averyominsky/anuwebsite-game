@@ -574,7 +574,6 @@ html[dir=rtl] .global-back{left:auto !important;right:16px !important;}
 <section class="screen" id="s-gallery">
   <div class="page-band">
     <h1 data-i18n="galleryTitle">Your Gallery</h1>
-    <p data-i18n="gallerySub">Your photos from every floor.</p>
   </div>
   <div class="scroll-body">
     <div class="photo-grid" id="photoGrid"></div>
@@ -799,18 +798,18 @@ function t(k){ return (S[lang]||S.en)[k]||k; }
 /* ═══════════ MISSIONS ═══════════ */
 const FLOORS=[
   { id:1, missions:[
-    { id:0,img:"images/mission-1.jpg",art:"🌾",pts:15,type:"chip",theme:"belonging",
+    { id:0,img:"anu1.jpg",art:"🌾",pts:15,type:"chip",theme:"belonging",
       title:{en:"Find Ruth and Naomi by Adi Nes",he:"מצאו את רות ונעמי מאת אדי נס"},
       desc:{en:"It's in The Bible in World Culture (Exhibit 1.2.05.10.02). Take a photo of it.",he:"היא נמצאת ב״התנ״ך בתרבות העולם״ (תערוכה 1.2.05.10.02). צלמו אותה."},
       q:{en:"In this photo, two women gather leftover food. What do you notice about how they are together?",he:"בתמונה שתי נשים מלקטות שאריות אוכל. מה אתם מבחינים באופן שבו הן יחד?"},
       chips:{en:["Like they'd do anything for each other","Quiet and a little sad","Strong, like a promise","Like someone in my own family"],
              he:["כאילו הם יעשו הכול זה בשביל זה","שקט ומעט עצוב","חזק, כמו הבטחה","כמו מישהו מהמשפחה שלי"]}},
-    { id:1,img:"images/mission-2.jpg",art:"📦",pts:10,type:"text",theme:"interpretation",
+    { id:1,img:"anu2.jpg",art:"📦",pts:10,type:"text",theme:"interpretation",
       title:{en:"Find Caution, Fragile by Ken Goldman",he:"מצאו את זהירות, שביר מאת קן גולדמן"},
       desc:{en:"It's an engraved wine glass in Fundamentals of Jewish Identity (Exhibit 1.3.18). Take a photo of it.",he:"זוהי כוס יין חרוטה ב״יסודות הזהות היהודית״ (תערוכה 1.3.18). צלמו אותה."},
       q:{en:"The title says Caution, Fragile. What do you think needs to be handled with care?",he:"הכותרת אומרת זהירות, שביר. מה לדעתכם צריך לטפל בו בזהירות?"},
       placeholder:{en:"What feels fragile, and why does it matter?",he:"מה מרגיש שביר, ולמה זה חשוב?"}},
-    { id:2,img:"images/mission-3.jpg",art:"🕯️",pts:10,type:"chip",theme:"heritage",
+    { id:2,img:"anu3.jpg",art:"🕯️",pts:10,type:"chip",theme:"heritage",
       title:{en:"Find Alone on the Roof by Itamar Sagi",he:"מצאו את לבד על הגג מאת איתמר שגיא"},
       desc:{en:"It's an embroidered challah cover in Fundamentals of Jewish Identity (Exhibit 1.3.10). Take a photo of it.",he:"זהו כיסוי חלה רקום ב״יסודות הזהות היהודית״ (תערוכה 1.3.10). צלמו אותו."},
       q:{en:"Does this remind you of a tradition or a quiet moment at home?",he:"האם זה מזכיר לכם מסורת או רגע שקט בבית?"},
@@ -818,36 +817,36 @@ const FLOORS=[
              he:["מסורת ששומרת המשפחה שלי","חג אצל מישהו אחר","רגע שקט לבד","שום דבר שאני מכיר, אבל אני סקרן"]}}
   ]},
   { id:2, missions:[
-    { id:3,img:"images/mission-4.jpg",art:"🗽",pts:15,type:"text",theme:"heritage",
+    { id:3,img:"anu4.jpg",art:"🗽",pts:15,type:"text",theme:"heritage",
       title:{en:"Find the portrait wall in front of the New York skyline",he:"מצאו את קיר הדיוקנאות מול קו הרקיע של ניו יורק"},
       desc:{en:"It's framed portraits of well-known Jewish Americans, by Frederick Brenner, in The Great Migration (Exhibit 2.6.4.25). Take a photo of it.",he:"אלה דיוקנאות ממוסגרים של יהודים אמריקאים מוכרים, מאת פרדריק ברנר, ב״ההגירה הגדולה״ (תערוכה 2.6.4.25). צלמו אותם."},
       q:{en:"Many Jewish families moved to America and built new lives. Who would you put on a wall of people who inspire your family?",he:"משפחות יהודיות רבות עברו לאמריקה ובנו חיים חדשים. את מי הייתם שמים על קיר של אנשים שמעניקים השראה למשפחה שלכם?"},
       placeholder:{en:"Who would you choose, and why?",he:"את מי הייתם בוחרים, ולמה?"}},
-    { id:4,img:"images/mission-5.jpg",art:"🗺️",pts:10,type:"chip",theme:"curiosity",
+    { id:4,img:"anu5.jpg",art:"🗺️",pts:10,type:"chip",theme:"curiosity",
       title:{en:"Find the world map from a Muslim perspective",he:"מצאו את מפת העולם מנקודת מבט מוסלמית"},
       desc:{en:"It's a map with south at the top, in Sephardic and Ashkenazi (Exhibit 2.3.05.01). Take a photo of it.",he:"זוהי מפה שבה הדרום למעלה, ב״ספרדים ואשכנזים״ (תערוכה 2.3.05.01). צלמו אותה."},
       q:{en:"Every map shows the world from someone's point of view. What do you notice here?",he:"כל מפה מראה את העולם מנקודת מבט של מישהו. מה אתם מבחינים כאן?"},
       chips:{en:["The world looks different than I expected","It's hard to find places I know","Whoever drew it chose what to show","I want to ask someone about this"],
              he:["העולם נראה שונה ממה שציפיתי","קשה למצוא מקומות שאני מכיר","מי שצייר בחר מה להראות","אני רוצה לשאול מישהו על זה"]}},
-    { id:5,img:"images/mission-6.jpg",art:"🏛️",pts:10,type:"text",theme:"community",
+    { id:5,img:"anu6.jpg",art:"🏛️",pts:10,type:"text",theme:"community",
       title:{en:"Find And make me a temple",he:"מצאו את ועשו לי מקדש"},
       desc:{en:"Look in Faith and Creation (Exhibit 2.5.03). Take a photo of it.",he:"חפשו ב״אמונה ויצירה״ (תערוכה 2.5.03). צלמו אותה."},
       q:{en:"If your family built a sacred place together, what would it need to have inside?",he:"אם המשפחה שלכם הייתה בונה יחד מקום קדוש, מה צריך להיות בו?"},
       placeholder:{en:"What would it hold, and who would help build it?",he:"מה יהיה בו, ומי יעזור לבנות אותו?"}}
   ]},
   { id:3, missions:[
-    { id:6,img:"images/mission-7.jpg",art:"🐟",pts:15,type:"text",theme:"belonging",
+    { id:6,img:"anu7.jpg",art:"🐟",pts:15,type:"text",theme:"belonging",
       title:{en:"Find Herring and a Bottle of Chianti by Chaim Soutine",he:"מצאו את הרינג ובקבוק קיאנטי מאת חיים סוטין"},
       desc:{en:"It's in Jewish Art (Exhibit 3.5.4.14). Take a photo of it.",he:"היא ב״אמנות יהודית״ (תערוכה 3.5.4.14). צלמו אותה."},
       q:{en:"Soutine painted an everyday meal. What everyday objects would you paint to show your family?",he:"סוטין צייר ארוחה יומיומית. אילו חפצים יומיומיים הייתם מציירים כדי להראות את המשפחה שלכם?"},
       placeholder:{en:"What would be in your painting?",he:"מה יהיה בציור שלכם?"}},
-    { id:7,img:"images/mission-8.jpg",art:"💃",pts:10,type:"chip",theme:"community",
+    { id:7,img:"anu8.jpg",art:"💃",pts:10,type:"chip",theme:"community",
       title:{en:"Find Dancing Jewish Couple, New York by Diane Arbus",he:"מצאו את זוג יהודי רוקד, ניו יורק מאת דיאן ארבוס"},
       desc:{en:"It's in Jewish Art (Exhibit 3.5.4.20). Take a photo of it.",he:"היא ב״אמנות יהודית״ (תערוכה 3.5.4.20). צלמו אותה."},
       q:{en:"Imagine the moment this photo was taken. What is happening?",he:"דמיינו את הרגע שבו התמונה צולמה. מה קורה שם?"},
       chips:{en:["A celebration with family and friends","A quiet moment between two people","A tradition being passed on","I can't tell, and that's interesting"],
              he:["חגיגה עם משפחה וחברים","רגע שקט בין שני אנשים","מסורת שעוברת הלאה","אי אפשר לדעת, וזה מעניין"]}},
-    { id:8,img:"images/mission-9.jpg",art:"📐",pts:10,type:"chip",theme:"curiosity",
+    { id:8,img:"anu9.jpg",art:"📐",pts:10,type:"chip",theme:"curiosity",
       title:{en:"Find Proun 5 A by El Lissitzky",he:"מצאו את פרון 5 A מאת אל ליסיצקי"},
       desc:{en:"It's in Jewish Art (Exhibit 3.5.4.09). Take a photo of it.",he:"היא ב״אמנות יהודית״ (תערוכה 3.5.4.09). צלמו אותה."},
       q:{en:"This art has no people in it. What does it make you think of?",he:"אין בעבודה הזו אנשים. על מה היא גורמת לכם לחשוב?"},
@@ -906,10 +905,10 @@ function goTo(screen,addHistory=true){
   const target=document.getElementById('s-'+screen);
   if(target) target.classList.add('active');
   document.body.classList.toggle('light',LIGHT_SCREENS.includes(screen));
-  document.body.classList.toggle('header-image', screen==='hub' || screen.startsWith('floor'));
+  document.body.classList.toggle('header-image', screen==='hub' || screen==='gallery' || screen.startsWith('floor'));
   document.body.classList.remove('no-global-header');
   const logo=document.getElementById('globalLogoImg');
-  if(logo) logo.src=(screen==='hub' || screen.startsWith('floor'))?'anuheader2.jpg':'anuheader.jpg';
+  if(logo) logo.src=(screen==='hub' || screen==='gallery' || screen.startsWith('floor'))?'anuheader2.jpg':'anuheader.jpg';
   const back=document.getElementById('globalBack');
   if(back) back.style.display=(screen==='entry')?'none':'flex';
   if(screen==='hub')renderHub();
@@ -947,7 +946,7 @@ function refreshView(){
 const IMG_EXTS=['jpg','jpeg','png','webp'];
 function imgCandidates(path,extra){
   const base=path.replace(/\.\w+$/,'');const name=base.split('/').pop();const out=[];
-  [base,name].forEach(b=>IMG_EXTS.forEach(e=>out.push(b+'.'+e)));return out.concat(extra||[]);
+  [base,name,'images/'+name].forEach(b=>IMG_EXTS.forEach(e=>out.push(b+'.'+e)));return out.concat(extra||[]);
 }
 function imgFallback(el){
   const list=JSON.parse(el.dataset.c);const i=+el.dataset.i+1;
