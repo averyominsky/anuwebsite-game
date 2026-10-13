@@ -258,6 +258,10 @@ body.lang-he .modal-tag{letter-spacing:0;text-transform:none;}
 .modal-title{font-size:20px;font-weight:700;color:var(--ink);line-height:1.25;margin-bottom:8px;}
 .modal-desc{font-size:14px;color:var(--muted-dark);line-height:1.6;}
 
+/* reference image */
+.ref-wrap{margin:0 20px 14px;border-radius:14px;overflow:hidden;background:var(--paper);border:1px solid var(--line-light);}
+.ref-img{display:block;width:100%;max-height:230px;object-fit:contain;background:var(--paper);}
+.ref-wrap figcaption{padding:7px 12px;font-size:12px;font-weight:600;color:var(--blue);background:var(--blue-light);}
 /* scan zone */
 .scan-zone{position:relative;background:linear-gradient(160deg,var(--blue-deeper),var(--blue-dark));aspect-ratio:16/9;overflow:hidden;margin:0 0 14px;display:flex;align-items:center;justify-content:center;}
 .scan-art{font-size:64px;filter:blur(16px) brightness(.5);transition:filter .3s;}
@@ -282,7 +286,7 @@ body.lang-he .scan-label{letter-spacing:0;}
 /* question */
 .q-area{display:none;padding:0 20px;}
 .q-area.active{display:block;}
-.q-label{font-size:11px;font-weight:700;letter-spacing:0.1em;color:var(--muted-dark);text-transform:uppercase;margin-bottom:10px;}
+.q-label{font-size:15px;font-weight:600;line-height:1.45;color:var(--ink);margin-bottom:12px;}
 body.lang-he .q-label{letter-spacing:0;text-transform:none;}
 .chip-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
 .chip{border:1.5px solid rgba(40,20,255,0.2);background:var(--blue-light);color:var(--blue);padding:9px 16px;border-radius:999px;font-size:13px;cursor:pointer;font-weight:500;transition:all .12s;}
@@ -333,6 +337,17 @@ body.light .global-header-placeholder{color:var(--blue);}
 body.no-global-header .global-header{display:none;}
 body.no-global-header .screen{padding-top:0;}
 
+/* ── SHARED BLUE PAGE BAND (gallery, reflection, photo booth) ── */
+.page-band{background:var(--blue);color:var(--white);padding:24px 22px 26px;flex-shrink:0;}
+.page-band h1{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:46px;line-height:.95;}
+body.lang-he .page-band h1{font-family:'Rubik',sans-serif;font-weight:700;font-size:34px;line-height:1.15;}
+.page-band p{margin-top:8px;font-size:14px;line-height:1.5;color:rgba(255,255,255,.78);max-width:380px;}
+/* simpler reflection */
+.identity-body{padding:26px 22px 40px;max-width:520px;width:100%;margin:0 auto;}
+.identity-text-card{background:transparent;border:none;box-shadow:none;padding:0;font-size:18px;line-height:1.65;color:var(--ink);margin-bottom:20px;}
+.loading-card{background:transparent;border:none;padding:40px 0;}
+.keyword-row{margin-bottom:18px;}
+.disclaimer{font-size:12px;}
 /* ── LANG TOGGLE ON WHITE HEADER ───────────────── */
 body.header-image .lang-toggle{background:rgba(40,20,255,0.08);border-color:rgba(40,20,255,0.2);}
 body.header-image .lang-toggle button{color:var(--ink);}
@@ -344,11 +359,19 @@ body.header-image .lang-toggle button.active{background:var(--blue);color:var(--
 body.lang-he .hub-title{font-family:'Rubik',sans-serif;font-weight:700;font-size:40px;line-height:1.1;}
 .hub-sub{margin-top:10px;font-size:15px;line-height:1.55;color:rgba(255,255,255,.78);max-width:380px;}
 
+.hub-section-title{font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:30px;line-height:1;margin-bottom:-10px;}
+body.lang-he .hub-section-title{font-family:'Rubik',sans-serif;font-weight:700;font-size:24px;}
 .floor-stack{display:flex;flex-direction:column;gap:12px;}
 .floor-card{display:flex;align-items:center;gap:16px;width:100%;text-align:left;padding:16px 16px 16px 14px;background:var(--white);color:var(--ink);border:2px solid transparent;border-radius:20px;box-shadow:0 8px 30px rgba(0,0,40,.22);transition:transform .15s,border-color .15s;}
 html[dir=rtl] .floor-card{text-align:right;padding:16px 14px 16px 16px;}
 .floor-card:hover{transform:translateY(-2px);border-color:var(--gold);}
-.floor-num{flex-shrink:0;width:62px;height:62px;border-radius:16px;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:40px;color:var(--ink);line-height:1;}
+.floor-num{position:relative;overflow:hidden;flex-shrink:0;width:72px;height:72px;border-radius:16px;background:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Barlow Condensed',sans-serif;font-weight:800;font-size:40px;color:var(--ink);line-height:1;}
+.floor-num img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.floor-num img::after{content:'';}
+.floor-num span{position:relative;}
+.floor-num img + span{color:var(--white);text-shadow:0 2px 8px rgba(0,0,0,.55);}
+.floor-num:has(img)::after{content:'';position:absolute;inset:0;background:linear-gradient(to top,rgba(14,8,112,.55),rgba(14,8,112,.05));}
+.floor-num:has(img) span{z-index:1;}
 .floor-card.complete .floor-num{background:var(--done);color:var(--white);}
 .floor-card-body{flex:1;min-width:0;}
 .floor-card-title{font-size:17px;font-weight:700;line-height:1.2;}
@@ -389,7 +412,8 @@ body.lang-he .floor-head-title{font-family:'Rubik',sans-serif;font-weight:700;fo
 .floor-missions .mission-card{padding:16px;border:2px solid transparent;border-radius:18px;box-shadow:0 8px 30px rgba(0,0,40,.22);}
 .floor-missions .mission-card:hover{border-color:var(--gold);}
 .floor-missions .mission-card.done{background:var(--white);border-color:var(--done);}
-.floor-missions .mission-icon{width:52px;height:52px;font-size:26px;border-radius:14px;background:var(--gold);}
+.floor-missions .mission-icon{width:64px;height:64px;font-size:28px;border-radius:14px;background:var(--gold);overflow:hidden;}
+.floor-missions .mission-icon img{width:100%;height:100%;object-fit:cover;display:block;}
 .floor-missions .mission-card.done .mission-icon{background:rgba(29,170,96,.15);}
 .floor-missions .mission-title{font-size:15px;}
 .floor-missions .mission-label{text-transform:none;letter-spacing:0;font-size:11px;}
@@ -515,15 +539,16 @@ html[dir=rtl] .global-back{left:auto !important;right:16px !important;}
 <section class="screen floor-screen" id="s-floor3"></section>
 
 <!-- ═══════════════════════════════════
-  3. YOUR ADVENTURE / ACTIVITY HUB  (light)
+  3. A Virtual Quest / ACTIVITY HUB  (light)
   Intro instructions, photo gallery, and floor choices live together.
 ════════════════════════════════════ -->
 <section class="screen" id="s-hub">
   <div class="hub-wrap">
     <div>
-      <h1 class="hub-title" data-i18n="hubTitle">Your Adventure</h1>
+      <h1 class="hub-title" data-i18n="hubTitle">A Virtual Quest</h1>
       <p class="hub-sub" data-i18n="hubSub">Pick a floor, find the objects, and share what you notice.</p>
     </div>
+    <h2 class="hub-section-title" data-i18n="floorsHeading">Floors</h2>
     <div class="floor-stack" id="floorStack"></div>
     <button class="finale-card" id="finaleCard" onclick="goTo('gallery')"></button>
     <div class="footer-credit" data-i18n="footerCredit">ANU Quest — Museum of the Jewish People</div>
@@ -534,9 +559,9 @@ html[dir=rtl] .global-back{left:auto !important;right:16px !important;}
   4. GALLERY  (light)
 ════════════════════════════════════ -->
 <section class="screen" id="s-gallery">
-  <div class="screen-topbar">
-    <button class="back-btn" onclick="goTo('hub')" aria-label="Back">←</button>
-    <span class="screen-title" data-i18n="galleryTitle">Your Gallery</span>
+  <div class="page-band">
+    <h1 data-i18n="galleryTitle">Your Gallery</h1>
+    <p data-i18n="gallerySub">Your photos from every floor.</p>
   </div>
   <div class="scroll-body">
     <div class="photo-grid" id="photoGrid"></div>
@@ -549,10 +574,9 @@ html[dir=rtl] .global-back{left:auto !important;right:16px !important;}
   5. AI IDENTITY  (light, blue band top)
 ════════════════════════════════════ -->
 <section class="screen" id="s-identity">
-  <div class="identity-band">
-    <div class="identity-eyebrow" data-i18n="identityEyebrow">Built from your visit</div>
-    <div class="identity-headline" data-i18n="identityHeadline">Your Identity Reflection</div>
-    <div class="identity-sub" data-i18n="identitySub">What the museum revealed about you.</div>
+  <div class="page-band">
+    <h1 data-i18n="identityHeadline">Your Identity Reflection</h1>
+    <p data-i18n="identitySub">What the museum revealed about you.</p>
   </div>
   <div class="identity-body">
     <div id="identityLoading" class="loading-card">
@@ -576,10 +600,9 @@ html[dir=rtl] .global-back{left:auto !important;right:16px !important;}
   6. PHOTOBOOTH  (light, blue band top)
 ════════════════════════════════════ -->
 <section class="screen" id="s-booth">
-  <div class="booth-header">
-    <div class="identity-eyebrow" data-i18n="boothEyebrow">One last stop</div>
-    <div style="font-size:22px;font-weight:700;" data-i18n="boothTitle">ANU Photo Booth</div>
-    <div class="booth-desc" data-i18n="boothDesc">Take a selfie to remember your visit — ANU-branded and ready to share.</div>
+  <div class="page-band">
+    <h1 data-i18n="boothTitle">ANU Photo Booth</h1>
+    <p data-i18n="boothDesc">Take a selfie to remember your visit — ANU-branded and ready to share.</p>
   </div>
   <div class="scroll-body" style="padding:16px 20px 40px;">
     <div class="booth-frame" id="boothFrame">
@@ -608,6 +631,10 @@ html[dir=rtl] .global-back{left:auto !important;right:16px !important;}
       <div class="modal-title" id="modalTitle"></div>
       <div class="modal-desc" id="modalDesc"></div>
     </div>
+    <figure class="ref-wrap" id="refWrap" style="display:none;">
+      <img class="ref-img" id="refImg" alt="" referrerpolicy="no-referrer">
+      <figcaption data-i18n="refLabel">What to look for</figcaption>
+    </figure>
     <div class="scan-zone" id="scanZone">
       <div class="scan-art" id="scanArt" aria-hidden="true"></div>
       <video class="scan-video" id="scanVideo" autoplay muted playsinline aria-hidden="true"></video>
@@ -672,7 +699,10 @@ const S = {
     shareBtn:"Share",
     backToReflection:"← Back to your reflection",
     progressLabel:"missions complete",
-    hubTitle:"Your Adventure",
+    floorsHeading:"Floors",
+    refLabel:"What to look for",
+    gallerySub:"Your photos from every floor.",
+    hubTitle:"A Virtual Quest",
     hubSub:"Pick a floor, find the objects, and share what you notice.",
     doneCount:"done",
     allFloors:"All floors",
@@ -729,6 +759,9 @@ const S = {
     shareBtn:"שתפו",
     backToReflection:"חזרה לרפלקציה",
     progressLabel:"משימות הושלמו",
+    floorsHeading:"קומות",
+    refLabel:"מה לחפש",
+    gallerySub:"התמונות שלכם מכל הקומות.",
     hubTitle:"ההרפתקה שלכם",
     hubSub:"בחרו קומה, מצאו את החפצים, ושתפו מה שאתם שמים לב אליו.",
     doneCount:"הושלמו",
@@ -745,37 +778,60 @@ function t(k){ return (S[lang]||S.en)[k]||k; }
 /* ═══════════ MISSIONS ═══════════ */
 const FLOORS=[
   { id:1, missions:[
-    { id:0,art:"🏺",pts:15,type:"chip",
-      title:{en:"Find the oldest object you can see",he:"מצאו את החפץ העתיק ביותר שאתם רואים"},
-      desc:{en:"Look for something whose age outlasts most living languages. Scan it when you find it.",he:"חפשו משהו שגילו עולה על רוב השפות החיות. סרקו אותו כשתמצאו אותו."},
-      chips:{en:["Ancient and distant","Surprisingly familiar","Hard to imagine that span of time","Makes today feel small"],
-             he:["עתיק ומרוחק","מוכר באופן מפתיע","קשה לדמיין פרק זמן כזה","מקטין את ההווה"]},theme:"memory"},
-    { id:1,art:"📜",pts:10,type:"text",
-      title:{en:"Find an object that tells a story without words",he:"מצאו חפץ שמספר סיפור בלי מילים"},
-      desc:{en:"No label needed — let the form, material, and placement speak. Scan it, then describe what you see.",he:"בלי תווית — תנו לצורה, לחומר ולמיקום לדבר. סרקו ותארו מה אתם רואים."},
-      placeholder:{en:"What story does this object tell?",he:"איזה סיפור מספר החפץ הזה?"},theme:"interpretation"}
+    { id:0,img:"images/ruth-naomi.jpg",web:"https://index.anumuseum.org.il/wp-content/uploads/IMG-20211114-WA0025.jpg",art:"🌾",pts:15,type:"chip",theme:"belonging",
+      title:{en:"Find Ruth and Naomi by Adi Nes",he:"מצאו את רות ונעמי מאת אדי נס"},
+      desc:{en:"It's in The Bible in World Culture (Exhibit 1.2.05.10.02). Take a photo of it.",he:"היא נמצאת ב״התנ״ך בתרבות העולם״ (תערוכה 1.2.05.10.02). צלמו אותה."},
+      q:{en:"In this photo, two women gather leftover food. What do you notice about how they are together?",he:"בתמונה שתי נשים מלקטות שאריות אוכל. מה אתם מבחינים באופן שבו הן יחד?"},
+      chips:{en:["Like they'd do anything for each other","Quiet and a little sad","Strong, like a promise","Like someone in my own family"],
+             he:["כאילו הם יעשו הכול זה בשביל זה","שקט ומעט עצוב","חזק, כמו הבטחה","כמו מישהו מהמשפחה שלי"]}},
+    { id:1,img:"images/caution-fragile.jpg",web:"https://index.anumuseum.org.il/wp-content/uploads/1.3.18.jpg",art:"📦",pts:10,type:"text",theme:"interpretation",
+      title:{en:"Find Caution, Fragile by Ken Goldman",he:"מצאו את זהירות, שביר מאת קן גולדמן"},
+      desc:{en:"It's an engraved wine glass in Fundamentals of Jewish Identity (Exhibit 1.3.18). Take a photo of it.",he:"זוהי כוס יין חרוטה ב״יסודות הזהות היהודית״ (תערוכה 1.3.18). צלמו אותה."},
+      q:{en:"The title says Caution, Fragile. What do you think needs to be handled with care?",he:"הכותרת אומרת זהירות, שביר. מה לדעתכם צריך לטפל בו בזהירות?"},
+      placeholder:{en:"What feels fragile, and why does it matter?",he:"מה מרגיש שביר, ולמה זה חשוב?"}},
+    { id:2,img:"images/alone-on-the-roof.jpg",web:"https://index.anumuseum.org.il/wp-content/uploads/1.3.10.jpg",art:"🕯️",pts:10,type:"chip",theme:"heritage",
+      title:{en:"Find Alone on the Roof by Itamar Sagi",he:"מצאו את לבד על הגג מאת איתמר שגיא"},
+      desc:{en:"It's an embroidered challah cover in Fundamentals of Jewish Identity (Exhibit 1.3.10). Take a photo of it.",he:"זהו כיסוי חלה רקום ב״יסודות הזהות היהודית״ (תערוכה 1.3.10). צלמו אותו."},
+      q:{en:"Does this remind you of a tradition or a quiet moment at home?",he:"האם זה מזכיר לכם מסורת או רגע שקט בבית?"},
+      chips:{en:["A tradition my family keeps","A holiday at someone else's table","A quiet moment alone","Nothing I know yet, but I'm curious"],
+             he:["מסורת ששומרת המשפחה שלי","חג אצל מישהו אחר","רגע שקט לבד","שום דבר שאני מכיר, אבל אני סקרן"]}}
   ]},
   { id:2, missions:[
-    { id:2,art:"🧬",pts:15,type:"chip",
-      title:{en:"Find something connected to your family's heritage",he:"מצאו משהו הקשור למורשת המשפחה שלכם"},
-      desc:{en:"It doesn't need to be exact — a region, tradition, language, or craft. Scan whatever feels closest.",he:"לא צריך להיות מדויק — אזור, מסורת, שפה או מלאכה. סרקו מה שמרגיש הכי קרוב."},
-      chips:{en:["Direct family connection","Connected to my community","No link, but it resonated","Made me want to ask my family more"],
-             he:["קשר ישיר למשפחה שלי","קשר לקהילה שלי","אין קשר, אבל נגע בי","עורר רצון לשאול את משפחתי"]},theme:"heritage"},
-    { id:3,art:"🤝",pts:10,type:"chip",
-      title:{en:"Find an object made by many hands",he:"מצאו יצירה שנוצרה בידי אנשים רבים"},
-      desc:{en:"Some pieces took hundreds of people to create. Find one built through collaboration and scan it.",he:"יצירות מסוימות דרשו מאות אנשים. מצאו אחת שנבנתה בשיתוף פעולה וסרקו אותה."},
-      chips:{en:["Stronger for it","Something lost without a single author","Both — it's complicated","Changed how I think about making"],
-             he:["חזקה יותר בגלל זה","משהו אבד בלי יוצר בודד","גם וגם","שינתה את איך שאני חושב על יצירה"]},theme:"community"}
+    { id:3,img:"images/ny-skyline.jpg",web:"https://index.anumuseum.org.il/wp-content/uploads/2.6.4.25.jpg",art:"🗽",pts:15,type:"text",theme:"heritage",
+      title:{en:"Find the portrait wall in front of the New York skyline",he:"מצאו את קיר הדיוקנאות מול קו הרקיע של ניו יורק"},
+      desc:{en:"It's framed portraits of well-known Jewish Americans, by Frederick Brenner, in The Great Migration (Exhibit 2.6.4.25). Take a photo of it.",he:"אלה דיוקנאות ממוסגרים של יהודים אמריקאים מוכרים, מאת פרדריק ברנר, ב״ההגירה הגדולה״ (תערוכה 2.6.4.25). צלמו אותם."},
+      q:{en:"Many Jewish families moved to America and built new lives. Who would you put on a wall of people who inspire your family?",he:"משפחות יהודיות רבות עברו לאמריקה ובנו חיים חדשים. את מי הייתם שמים על קיר של אנשים שמעניקים השראה למשפחה שלכם?"},
+      placeholder:{en:"Who would you choose, and why?",he:"את מי הייתם בוחרים, ולמה?"}},
+    { id:4,img:"images/muslim-world-map.jpg",web:"https://index.anumuseum.org.il/wp-content/uploads/2.3.05.01.jpg",art:"🗺️",pts:10,type:"chip",theme:"curiosity",
+      title:{en:"Find the world map from a Muslim perspective",he:"מצאו את מפת העולם מנקודת מבט מוסלמית"},
+      desc:{en:"It's a map with south at the top, in Sephardic and Ashkenazi (Exhibit 2.3.05.01). Take a photo of it.",he:"זוהי מפה שבה הדרום למעלה, ב״ספרדים ואשכנזים״ (תערוכה 2.3.05.01). צלמו אותה."},
+      q:{en:"Every map shows the world from someone's point of view. What do you notice here?",he:"כל מפה מראה את העולם מנקודת מבט של מישהו. מה אתם מבחינים כאן?"},
+      chips:{en:["The world looks different than I expected","It's hard to find places I know","Whoever drew it chose what to show","I want to ask someone about this"],
+             he:["העולם נראה שונה ממה שציפיתי","קשה למצוא מקומות שאני מכיר","מי שצייר בחר מה להראות","אני רוצה לשאול מישהו על זה"]}},
+    { id:5,img:"images/make-me-a-temple.jpg",web:"https://index.anumuseum.org.il/wp-content/uploads/2.5.03.jpg",art:"🏛️",pts:10,type:"text",theme:"community",
+      title:{en:"Find And make me a temple",he:"מצאו את ועשו לי מקדש"},
+      desc:{en:"Look in Faith and Creation (Exhibit 2.5.03). Take a photo of it.",he:"חפשו ב״אמונה ויצירה״ (תערוכה 2.5.03). צלמו אותה."},
+      q:{en:"If your family built a sacred place together, what would it need to have inside?",he:"אם המשפחה שלכם הייתה בונה יחד מקום קדוש, מה צריך להיות בו?"},
+      placeholder:{en:"What would it hold, and who would help build it?",he:"מה יהיה בו, ומי יעזור לבנות אותו?"}}
   ]},
   { id:3, missions:[
-    { id:4,art:"💡",pts:10,type:"text",
-      title:{en:"Find something that genuinely surprised you",he:"מצאו משהו שהפתיע אתכם באמת"},
-      desc:{en:"Not the most famous piece — the one that caught you off guard. Scan it, then write what surprised you.",he:"לא היצירה המפורסמת ביותר — זו שתפסה אתכם. סרקו וכתבו מה הפתיע."},
-      placeholder:{en:"What surprised you, and why?",he:"מה הפתיע אתכם, ולמה?"},theme:"curiosity"},
-    { id:5,art:"🏠",pts:10,type:"text",
-      title:{en:"Which object would you bring home, and why?",he:"איזה חפץ הייתם לוקחים הביתה, ולמה?"},
-      desc:{en:"If you could keep one piece, which would it be? Scan it and explain your choice.",he:"אם יכלתם לשמור יצירה אחת, מה הייתם בוחרים? סרקו והסבירו."},
-      placeholder:{en:"What would you bring home, and why?",he:"מה הייתם לוקחים הביתה, ולמה?"},theme:"belonging"}
+    { id:6,img:"images/soutine-herring.jpg",web:"https://index.anumuseum.org.il/wp-content/uploads/3.5.4.14.jpg",art:"🐟",pts:15,type:"text",theme:"belonging",
+      title:{en:"Find Herring and a Bottle of Chianti by Chaim Soutine",he:"מצאו את הרינג ובקבוק קיאנטי מאת חיים סוטין"},
+      desc:{en:"It's in Jewish Art (Exhibit 3.5.4.14). Take a photo of it.",he:"היא ב״אמנות יהודית״ (תערוכה 3.5.4.14). צלמו אותה."},
+      q:{en:"Soutine painted an everyday meal. What everyday objects would you paint to show your family?",he:"סוטין צייר ארוחה יומיומית. אילו חפצים יומיומיים הייתם מציירים כדי להראות את המשפחה שלכם?"},
+      placeholder:{en:"What would be in your painting?",he:"מה יהיה בציור שלכם?"}},
+    { id:7,img:"images/arbus-dancing-couple.jpg",web:"https://index.anumuseum.org.il/wp-content/uploads/3.5.4.20.jpg",art:"💃",pts:10,type:"chip",theme:"community",
+      title:{en:"Find Dancing Jewish Couple, New York by Diane Arbus",he:"מצאו את זוג יהודי רוקד, ניו יורק מאת דיאן ארבוס"},
+      desc:{en:"It's in Jewish Art (Exhibit 3.5.4.20). Take a photo of it.",he:"היא ב״אמנות יהודית״ (תערוכה 3.5.4.20). צלמו אותה."},
+      q:{en:"Imagine the moment this photo was taken. What is happening?",he:"דמיינו את הרגע שבו התמונה צולמה. מה קורה שם?"},
+      chips:{en:["A celebration with family and friends","A quiet moment between two people","A tradition being passed on","I can't tell, and that's interesting"],
+             he:["חגיגה עם משפחה וחברים","רגע שקט בין שני אנשים","מסורת שעוברת הלאה","אי אפשר לדעת, וזה מעניין"]}},
+    { id:8,img:"images/lissitzky-proun.jpg",web:"https://index.anumuseum.org.il/wp-content/uploads/3.5.4.09.jpg",art:"📐",pts:10,type:"chip",theme:"curiosity",
+      title:{en:"Find Proun 5 A by El Lissitzky",he:"מצאו את פרון 5 A מאת אל ליסיצקי"},
+      desc:{en:"It's in Jewish Art (Exhibit 3.5.4.09). Take a photo of it.",he:"היא ב״אמנות יהודית״ (תערוכה 3.5.4.09). צלמו אותה."},
+      q:{en:"This art has no people in it. What does it make you think of?",he:"אין בעבודה הזו אנשים. על מה היא גורמת לכם לחשוב?"},
+      chips:{en:["A city or a machine","A puzzle to solve","Outer space","Just shapes and colors"],
+             he:["עיר או מכונה","חידה לפתור","החלל","סתם צורות וצבעים"]}}
   ]}
 ];
 const ALL_MISSIONS=FLOORS.flatMap(f=>f.missions);
@@ -866,6 +922,23 @@ function refreshView(){
   else if(currentScreen==='hub')renderHub();
 }
 
+/* ═══════════ IMAGES (tries images/ folder and site root, .jpg/.jpeg/.png/.webp) ═══════════ */
+const IMG_EXTS=['jpg','jpeg','png','webp'];
+function imgCandidates(path,web){
+  const base=path.replace(/\.\w+$/,'');const name=base.split('/').pop();const out=web?[web]:[];
+  [base,name].forEach(b=>IMG_EXTS.forEach(e=>out.push(b+'.'+e)));return out;
+}
+function imgFallback(el){
+  const list=JSON.parse(el.dataset.c);const i=+el.dataset.i+1;
+  if(i<list.length){el.dataset.i=i;el.src=list[i];}
+  else if(el.dataset.fb){el.replaceWith(document.createTextNode(el.dataset.fb));}
+  else el.remove();
+}
+function artImg(path,fb,web){
+  const c=imgCandidates(path,web);
+  return `<img referrerpolicy="no-referrer" src="${c[0]}" alt="" data-c='${JSON.stringify(c)}' data-i="0"${fb?` data-fb="${fb}"`:''} onerror="imgFallback(this)">`;
+}
+
 /* ═══════════ FLOOR PAGES + HUB ═══════════ */
 const FLOOR_INFO={
   1:{title:{en:"The Foundations",he:"היסודות"},sub:{en:"A Common Core, A Universal Message",he:"ליבה משותפת, מסר אוניברסלי"}},
@@ -888,7 +961,7 @@ function renderFloor(n){
   const missions=floor.missions.map(m=>{
     const done=completed.has(m.id);
     return `<button class="mission-card${done?' done':''}" onclick="openMission(${m.id})">
-      <div class="mission-icon">${m.art}</div>
+      <div class="mission-icon">${m.img?artImg(m.img,m.art,m.web):m.art}</div>
       <div class="mission-body">
         <div class="mission-label">${done?t('completedTag'):(t('missionPrefix')+' '+(m.id+1))}</div>
         <div class="mission-title">${m.title[lang]}</div>
@@ -912,7 +985,7 @@ function renderHub(){
     const f=FLOORS.find(x=>x.id===i);
     const d=floorDone(i);
     return `<button class="floor-card${d===f.missions.length?' complete':''}" onclick="goToFloor(${i})">
-      <div class="floor-num">${i}</div>
+      <div class="floor-num">${artImg('images/floor-'+i+'.jpg')}<span>${i}</span></div>
       <div class="floor-card-body">
         <div class="floor-card-title">${FLOOR_INFO[i].title[lang]}</div>
         <div class="floor-card-sub">${FLOOR_INFO[i].sub[lang]}</div>
@@ -946,6 +1019,11 @@ function renderModal(){
   document.getElementById('modalTitle').textContent=m.title[lang];
   document.getElementById('modalDesc').textContent=m.desc[lang];
   document.getElementById('scanArt').textContent=m.art;
+  const rw=document.getElementById('refWrap'),ri=document.getElementById('refImg');
+  if(m.img){
+    ri.alt=m.title[lang];
+    if(ri.dataset.path!==m.img){const c=imgCandidates(m.img,m.web);ri.dataset.path=m.img;ri.dataset.c=JSON.stringify(c);ri.dataset.i=0;rw.style.display='none';ri.src=c[0];}
+  }else{rw.style.display='none';ri.removeAttribute('src');delete ri.dataset.path;}
   renderScanZone();
   const qa=document.getElementById('qArea');
   qa.classList.toggle('active',scanned);
@@ -953,10 +1031,10 @@ function renderModal(){
     const lbl=document.getElementById('qLabel');
     const inner=document.getElementById('qInner');
     if(m.type==='chip'){
-      lbl.textContent=t('reactionQ');
+      lbl.textContent=m.q?m.q[lang]:t('reactionQ');
       inner.innerHTML=`<div class="chip-row">${m.chips[lang].map(c=>`<button type="button" class="chip"${pendingAnswer===c?' aria-pressed="true"':''} onclick="pickChip(this,'${c.replace(/'/g,"&#39;")}')">${c}</button>`).join('')}</div>`;
     } else {
-      lbl.textContent=t('reflectionQ');
+      lbl.textContent=m.q?m.q[lang]:t('reflectionQ');
       inner.innerHTML=`<textarea class="q-text" id="qTextarea" placeholder="${m.placeholder[lang]}"></textarea>`;
       document.getElementById('qTextarea').oninput=function(){pendingAnswer=this.value.trim().length>2?this.value.trim():null;updateClaim();};
     }
@@ -983,6 +1061,10 @@ function completeMission(){
   if(completed.size===ALL_MISSIONS.length)setTimeout(()=>goTo('gallery'),350);
 }
 function closeModal(){stopCamera();document.getElementById('modalBackdrop').classList.remove('active');}
+(function(){const ri=document.getElementById('refImg'),rw=document.getElementById('refWrap');
+  ri.onload=()=>{rw.style.display='block';};
+  ri.onerror=()=>{const c=JSON.parse(ri.dataset.c||'[]');const i=+ri.dataset.i+1;
+    if(i<c.length){ri.dataset.i=i;ri.src=c[i];}else rw.style.display='none';};})();
 document.getElementById('modalBackdrop').addEventListener('click',e=>{if(e.target.id==='modalBackdrop')closeModal();});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 
@@ -1087,6 +1169,7 @@ function renderIdentityResult(){
 }
 
 /* ═══════════ PHOTOBOOTH ═══════════ */
+const brandImg=new Image();brandImg.src='welcome.jpg';
 function initBooth(){boothState='idle';renderBoothControls();}
 function renderBoothControls(){
   const row=document.getElementById('boothControls');const st=document.getElementById('boothStatus');
@@ -1129,13 +1212,20 @@ function captureBooth(){
   const ctx=c.getContext('2d');
   ctx.save();ctx.translate(w,0);ctx.scale(-1,1);ctx.drawImage(v,0,0,w,h);ctx.restore();
   const bw=Math.round(w*.04);ctx.strokeStyle='#2814FF';ctx.lineWidth=bw;ctx.strokeRect(bw/2,bw/2,w-bw,h-bw);
-  const bh=Math.round(h*.11);ctx.fillStyle='#2814FF';ctx.fillRect(0,h-bh,w,bh);
-  ctx.fillStyle='#FFFFFF';ctx.textAlign='center';
-  ctx.font=`900 ${Math.round(bh*.5)}px 'Barlow Condensed',sans-serif`;ctx.fillText('ANU',w*.28,h-bh*.25);
-  ctx.fillStyle='#F5C842';
-  ctx.font=`italic 700 ${Math.round(bh*.36)}px Georgia,serif`;ctx.fillText('Quest',w*.6,h-bh*.28);
-  ctx.fillStyle='rgba(255,255,255,0.7)';
-  ctx.font=`400 ${Math.round(bh*.16)}px sans-serif`;ctx.fillText('MUSEUM OF THE JEWISH PEOPLE',w*.5,h-bh*.08);
+  if(brandImg.complete&&brandImg.naturalWidth){
+    const bh=Math.round(h*.2);ctx.fillStyle='#2814FF';ctx.fillRect(0,h-bh,w,bh);
+    const sc=Math.min(w*.92/brandImg.naturalWidth,bh*.92/brandImg.naturalHeight);
+    const dw=brandImg.naturalWidth*sc,dh=brandImg.naturalHeight*sc;
+    ctx.drawImage(brandImg,(w-dw)/2,h-bh+(bh-dh)/2,dw,dh);
+  }else{
+    const bh=Math.round(h*.11);ctx.fillStyle='#2814FF';ctx.fillRect(0,h-bh,w,bh);
+    ctx.fillStyle='#FFFFFF';ctx.textAlign='center';
+    ctx.font=`900 ${Math.round(bh*.5)}px 'Barlow Condensed',sans-serif`;ctx.fillText('ANU',w*.28,h-bh*.25);
+    ctx.fillStyle='#F5C842';
+    ctx.font=`italic 700 ${Math.round(bh*.36)}px Georgia,serif`;ctx.fillText('Quest',w*.6,h-bh*.28);
+    ctx.fillStyle='rgba(255,255,255,0.7)';
+    ctx.font=`400 ${Math.round(bh*.16)}px sans-serif`;ctx.fillText('MUSEUM OF THE JEWISH PEOPLE',w*.5,h-bh*.08);
+  }
   stopBoothCamera();boothState='captured';renderBoothControls();
 }
 function retakeBooth(){boothState='idle';renderBoothControls();}
